@@ -11,8 +11,12 @@
     Hello World
 
     <img src="simple.png" alt="Girl in a jacket" width="500" height="600">
-    <canvas id="paint" width="750" height="450" style="border: 5px solid #000000;"></canvas>
+    <canvas id="paint" width="750" height="450" style="border: 5px solid #000000;">Update your browser for HTML5 support</canvas>
 
+    <form action="/action_page.php">
+        <label for="fname">First name:</label>
+        <input type="text" id="fname" name="fname"><br><br>
+      </form>
     <script src=" {{ url_for('static', filename='script.js') }}"></script>
 </body>
 {% endblock %}

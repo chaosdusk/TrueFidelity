@@ -9,6 +9,8 @@ var fill_value = true;
 var stroke_value = false;
 var canvas_data = {"pencil": [], "line": [], "rectangle": [], "circle": [], "eraser": []}
 
+var input = document.getElementById("fname")
+
 // line tool
         
 function line(){
@@ -23,6 +25,7 @@ function line(){
     canvas.onmousemove = function linemove(e){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (hold){
+            console.log("hi");
             ctx.putImageData(img, 0, 0);
             curX = e.clientX - canvas.offsetLeft;
             curY = e.clientY - canvas.offsetTop;
@@ -32,6 +35,7 @@ function line(){
             ctx.stroke();
             // canvas_data.line.push({ "starx": prevX, "starty": prevY, "endx": curX, "endY": curY, "thick": ctx.lineWidth, "color": ctx.strokeStyle });
             ctx.closePath();
+            input.value = Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2).toFixed(2);
         }
     };
             
