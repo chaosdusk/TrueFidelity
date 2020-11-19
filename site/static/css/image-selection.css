@@ -32,13 +32,13 @@
 
 .sidebar-container {
     background-color: grey;
-    flex-basis: 500px;
+    flex-basis: 350px;
 }
 
 
 .image-container {
     background-color: orange;
-    flex-basis: 500px;
+    width: 500px;
     position: relative;
 }
 

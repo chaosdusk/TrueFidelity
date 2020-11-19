@@ -10,15 +10,16 @@
   <div class="main-container">
     <div class="center-container">
       <div class="question-container">
-        <div class="image-container">
-          <img src="imagedata/false.png" alt="Girl in a jacket" width="500" height="500" draggable="false">
+        <div class="image-container" id="imageA">
+          <img src="imagedata/false.png" alt="Image A" width="500" height="500" draggable="false">
           <canvas class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
         </div>
-        <div class="image-container">
-          <img src="imagedata/true.png" alt="Girl in a jacket" width="500" height="500" draggable="false">
+        <div class="image-container" id="imageB">
+          <img src="imagedata/true.png"  alt="Image B" width="500" height="500" draggable="false">
           <canvas class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
         </div>
         <div class="choice-container">
+          Selected:
           <form action="/action_page.php">
             <label for="length">First name:</label>
             <input type="text" id="length" name="length"><br><br>

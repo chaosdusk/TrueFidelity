@@ -50,3 +50,16 @@ function setupCanvas(canvas) {
 }
 
 
+var iamgeA = document.getElementById("imageA");
+
+imageA.addEventListener("mousedown", function() {
+    console.log("clicked A");
+});
+
+var imageB = document.getElementById("imageB");
+
+imageB.addEventListener("mousedown", function() {
+    console.log("clicked B");
+});
+
+
