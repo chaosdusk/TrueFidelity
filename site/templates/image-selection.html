@@ -1,13 +1,12 @@
-{% extends 'baseNoBody.html' %}
+{% extends 'base.html' %}
 
 {% block head %}
 <!-- TODO -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/image-selection.css') }}">
 {% endblock %}
 
-{% block all %}
-<body onload="line()"><div class="body-container">
-  <!-- <div class="center-container" style="background-color: purple; height: 100px;">Header</div> -->
+{% block body %}
+<div class="body-container">
   <div class="main-container">
     <div class="center-container">
       <div class="question-container">
@@ -31,10 +30,9 @@
       sidebar
     </div>
   </div>
+</div>
+{% endblock %}
 
-
-
-  <script src=" {{ url_for('static', filename='script.js') }}"></script>
-
-</div></body>
+{% block script %}
+<script src=" {{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}
