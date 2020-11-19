@@ -1,0 +1,59 @@
+.body-container {
+    background-color: yellow;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.main-container {
+    background-color: orange;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.center-container {
+    background-color: pink;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    padding: 50px;
+}
+
+.question-container {
+    background-color: aqua;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.sidebar-container {
+    background-color: grey;
+    flex-basis: 500px;
+}
+
+
+.image-container {
+    background-color: orange;
+    flex-basis: 500px;
+    position: relative;
+}
+
+.choice-container {
+    background-color: orangered;
+    width: 100%;
+}
+
+.canvas-ruler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+}
+
+
+
+

@@ -12,23 +12,26 @@ var canvas_data = {"pencil": [], "line": [], "rectangle": [], "circle": [], "era
 var input = document.getElementById("fname")
 
 // line tool
-        
+
 function line(){
-           
+
     canvas.onmousedown = function (e){
+        var BB = canvas.getBoundingClientRect();
+
         img = ctx.getImageData(0, 0, width, height);
-        prevX = e.clientX - canvas.offsetLeft;
-        prevY = e.clientY - canvas.offsetTop;
+        prevX = e.clientX - BB.left;
+        prevY = e.clientY - BB.top
         hold = true;
     };
-            
+
     canvas.onmousemove = function linemove(e){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (hold){
+            var BB = canvas.getBoundingClientRect();
             console.log("hi");
             ctx.putImageData(img, 0, 0);
-            curX = e.clientX - canvas.offsetLeft;
-            curY = e.clientY - canvas.offsetTop;
+            curX = e.clientX - BB.left;
+            curY = e.clientY - BB.top;
             ctx.beginPath();
             ctx.moveTo(prevX, prevY);
             ctx.lineTo(curX, curY);
@@ -47,51 +50,3 @@ function line(){
          hold = false;
     };
 }
- 
-// eraser tool
-        
-function eraser(){
-    
-    canvas.onmousedown = function(e){
-        curX = e.clientX - canvas.offsetLeft;
-        curY = e.clientY - canvas.offsetTop;
-        hold = true;
-            
-        prevX = curX;
-        prevY = curY;
-        ctx.beginPath();
-        ctx.moveTo(prevX, prevY);
-    };
-        
-    canvas.onmousemove = function(e){
-        if(hold){
-            curX = e.clientX - canvas.offsetLeft;
-            curY = e.clientY - canvas.offsetTop;
-            draw();
-        }
-    };
-        
-    canvas.onmouseup = function(e){
-        hold = false;
-    };
-        
-    canvas.onmouseout = function(e){
-        hold = false;
-    };
-        
-    function draw(){
-        ctx.lineTo(curX, curY);
-        ctx.strokeStyle = "#ffffff";
-        ctx.stroke();
-        canvas_data.pencil.push({ "startx": prevX, "starty": prevY, "endx": curX, "endy": curY, "thick": ctx.lineWidth, "color": ctx.strokeStyle });
-    }    
-}  
-
-function save(){
-    var filename = document.getElementById("fname").value;
-    var data = JSON.stringify(canvas_data);
-    var image = canvas.toDataURL();
-    
-    $.post("/", { save_fname: filename, save_cdata: data, save_image: image });
-    alert(filename + " saved");
-} 

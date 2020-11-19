@@ -1,0 +1,40 @@
+{% extends 'baseNoBody.html' %}
+
+{% block head %}
+<!-- TODO -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/image-selection.css') }}">
+{% endblock %}
+
+{% block all %}
+<body onload="line()"><div class="body-container">
+  <!-- <div class="center-container" style="background-color: purple; height: 100px;">Header</div> -->
+  <div class="main-container">
+    <div class="center-container">
+      <div class="question-container">
+        <div class="image-container">
+          <img src="imagedata/false.png" alt="Girl in a jacket" width="500" height="500">
+          <canvas id="paint" class="canvas-ruler" width="500" height="500">Update your browser for HTML5 support</canvas>
+        </div>
+        <div class="image-container">
+          <img src="imagedata/true.png" alt="Girl in a jacket" width="500" height="500">
+          <canvas class="canvas-ruler" width="500" height="500">Update your browser for HTML5 support</canvas>
+        </div>
+        <div class="choice-container">
+          <form action="/action_page.php">
+            <label for="fname">First name:</label>
+            <input type="text" id="fname" name="fname"><br><br>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-container">
+      sidebar
+    </div>
+  </div>
+
+
+
+  <script src=" {{ url_for('static', filename='script.js') }}"></script>
+
+</div></body>
+{% endblock %}
