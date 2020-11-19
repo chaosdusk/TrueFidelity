@@ -15,17 +15,17 @@ app = Flask(__name__)
 def index():
     # This is how you can pass in information for the jinja liquid syntax
     # return render_template('index.html', tasks=tasks)
-    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)))
+    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=3)
 
-@app.route("/imagedata/false.png")
-def imagedata_false():
+@app.route("/imagedata/<int:amount>/false.png")
+def imagedata_false(amount):
     fig=Figure()
     ax=fig.add_subplot(111)
     x=[]
     y=[]
     now=datetime.datetime.now()
     delta=datetime.timedelta(days=1)
-    for i in range(10):
+    for i in range(amount):
         x.append(now)
         now+=delta
         y.append(random.randint(0, 1000))

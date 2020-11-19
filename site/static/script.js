@@ -50,10 +50,13 @@ function setupCanvas(canvas) {
 }
 
 
-var iamgeA = document.getElementById("imageA");
+var imageA = document.getElementById("imageA");
 
 imageA.addEventListener("mousedown", function() {
     console.log("clicked A");
+    var rand = Math.floor(Math.random() * 3 + 3);
+    console.log(rand)
+    document.getElementById("imageAimage").src = "imagedata/" + rand + "/false.png";
 });
 
 var imageB = document.getElementById("imageB");
@@ -63,3 +66,8 @@ imageB.addEventListener("mousedown", function() {
 });
 
 
+// Range change values
+function helloWorld(val, image) {
+    console.log(val);
+    document.getElementById(image).src = "imagedata/" + val + "/false.png";
+}
