@@ -1,61 +1,44 @@
 import pydicom
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+import random
 
-img = pydicom.read_file('./DICOM/ASIRV_0_30RED_8257/IM-0018-0001.dcm')
-image = img.pixel_array
-image2d = image.astype(float)
+# setup
+radius = 15
+lesion_locations = [(250, 390), (230, 355), (205, 305), (190, 270), (175, 245), 
+                    (300, 365), (280, 330), (255, 280), (240, 245), (225, 220),
+                    (350, 340), (330, 305), (305, 255), (290, 220), (275, 195)]
+noise_center = (145, 260)
 
-image2d_scaled = (np.maximum(image2d, 0) / image2d.max()) * 255.0
-image2d_scaled = np.uint8(image2d_scaled)
+# get random image to pull lesion and noise from
+directories = [x[0] for x in os.walk('./DICOM/')]
+image_index = random.randint(1, len(directories) - 1)
+lesion_index = random.randint(0, 14)
 
-print(image.dtype)
-print(image.shape)
-print(image)
+# path and load image
+image_path = directories[image_index]
+(_, _, image_file) = next(os.walk(image_path))
+image_full_path = '{}/{}'.format(image_path, image_file[0])
+img = pydicom.read_file(image_full_path)
 
-print(image2d_scaled.dtype)
-print(image2d_scaled.shape)
-print(image2d_scaled)
+# process image
+pixels = img.pixel_array.astype(float)
+scaled = np.uint8((np.maximum(pixels, 0) / pixels.max()) * 255.0)
 
-drop_y = 50
-drop_x = -25
+# get a 30x30 sample of noise, same dimension as lesion cut
+cut_noise = scaled[noise_center[0]-15:noise_center[0]+15, noise_center[1]-15:noise_center[1]+15]
+noise = np.full((120, 120), 1024)
+# 4x4 grid of noise
+for i in range(0, 91, 30):
+    for j in range(0, 91, 30):
+        noise[i:i+30, j:j+30] = cut_noise
+# select random grid to replace with the lesion cut
+lesion_x = random.randint(0, 3)
+lesion_y = random.randint(0, 3)
+lesion_selected = lesion_locations[lesion_index]
+lesion = scaled[lesion_selected[0]-15:lesion_selected[0]+15, lesion_selected[1]-15:lesion_selected[1]+15]
+noise[lesion_y*30:lesion_y*30+30, lesion_x*30:lesion_x*30+30] = lesion
 
-white = np.full(image2d_scaled.shape, 1024)
-dark_5 = image2d_scaled[235:265, 375:405]
-dark_4 = image2d_scaled[215:245, 340:370]
-dark_3 = image2d_scaled[190:220, 290:320]
-dark_2 = image2d_scaled[175:205, 255:285]
-dark_1 = image2d_scaled[160:190, 230:260]
-white[235:265, 375:405] = dark_5
-white[215:245, 340:370] = dark_4
-white[190:220, 290:320] = dark_3
-white[175:205, 255:285] = dark_2
-white[160:190, 230:260] = dark_1
-
-med_1 = image2d_scaled[285:315, 350:380]
-med_2 = image2d_scaled[265:295, 315:345]
-med_3 = image2d_scaled[240:270, 265:295]
-med_4 = image2d_scaled[225:255, 230:260]
-med_5 = image2d_scaled[210:240, 205:235]
-white[285:315, 350:380] = med_1
-white[265:295, 315:345] = med_2
-white[240:270, 265:295] = med_3
-white[225:255, 230:260] = med_4
-white[210:240, 205:235] = med_5
-
-light_1 = image2d_scaled[335:365, 325:355]
-light_2 = image2d_scaled[315:345, 290:320]
-light_3 = image2d_scaled[290:320, 240:270]
-light_4 = image2d_scaled[275:305, 205:235]
-light_5 = image2d_scaled[260:290, 180:210]
-white[335:365, 325:355] = light_1
-white[315:345, 290:320] = light_2
-white[290:320, 240:270] = light_3
-white[275:305, 205:235] = light_4
-white[260:290, 180:210] = light_5
-
-
-plt.imshow(white, cmap='gray', vmin=0, vmax=255)
-#plt.imshow(image2d, cmap='gray', vmin=0, vmax=255)
-#plt.imshow(image2d_scaled, cmap='gray', vmin=0, vmax=255)
+plt.imshow(noise, cmap='gray', vmin=0, vmax=255)
 plt.show()
