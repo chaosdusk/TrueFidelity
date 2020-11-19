@@ -41,11 +41,11 @@ function line(){
             input.value = Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2).toFixed(2);
         }
     };
-            
+
     canvas.onmouseup = function (e){
          hold = false;
     };
-            
+
     canvas.onmouseout = function (e){
          hold = false;
     };
