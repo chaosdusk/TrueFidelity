@@ -15,7 +15,7 @@ app = Flask(__name__)
 def index():
     # This is how you can pass in information for the jinja liquid syntax
     # return render_template('index.html', tasks=tasks)
-    return render_template('image-selection.html')
+    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)))
 
 @app.route("/imagedata/false.png")
 def imagedata_false():
