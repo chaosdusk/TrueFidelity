@@ -28,6 +28,7 @@
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
+    flex-basis: 1100px;
 }
 
 .sidebar-container {
@@ -56,7 +57,6 @@
 }
 
 .adjustment-container {
-    background-color: green;
     align-self: center;
     display: flex;
     justify-content: space-around;
@@ -66,6 +66,17 @@
 }
 
 
+.selected {
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: yellow;
+}
+
+.navigation-container {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+}
 
 /* Prevent weird ghost image form canavas page */
 img, div {
@@ -74,4 +85,4 @@ img, div {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
-  }
+}

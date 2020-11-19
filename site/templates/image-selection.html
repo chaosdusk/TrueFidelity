@@ -9,12 +9,11 @@
 <div class="body-container">
   <div class="main-container">
     <div class="center-container">
-      <div class="question-container">
-        {% if trueFirst or True %}
-        <div class="image-container" id="imageB">
+    <div class="question-container" style="flex-direction: {{ 'row' if trueFirst else 'row-reverse' }}" >
+        <div class="image-container">
           <img id="imageBimage" src="imagedata/true.png"  alt="Image B" width="500" height="500" draggable="false">
-          <canvas class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
-          <div class="adjustment-container">
+          <canvas id="imageB" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
+          <div class="adjustment-container selected">
             <div class="range-input">
               <input type="range" id="imageBww" name="ww"
                     min="0" max="100" value="50" step="1" oninput="helloWorld(this.value, 'imageBimage')">
@@ -26,25 +25,24 @@
               <label for="imageBwl">Range</label>
             </div>
           </div>
-        </div>
-        {% endif %}
-        <div class="image-container" id="imageA">
+        </div>        <div class="image-container">
           <img id="imageAimage" src="imagedata/{{ yeet }}/false.png" alt="Image A" width="500" height="500" draggable="false">
-          <canvas class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
+          <canvas id="imageA" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
           <div class="adjustment-container">Up Down</div>
         </div>
-        <!-- {% if not trueFirst %} TIODODODOO OUTDATED MAKE SURE COPY OTHER ONE-->
-        <!-- <div class="image-container" id="imageB">
-          <img src="imagedata/true.png"  alt="Image B" width="500" height="500" draggable="false">
-          <canvas class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
-        </div> -->
-        <!-- {% endif %} -->
         <div class="choice-container">
           Selected: {{ trueFirst }}
-          <form action="/action_page.php">
-            <label for="length">First name:</label>
-            <input type="text" id="length" name="length"><br><br>
+          <form onsubmit="return false;">
+            <label for="length">Length:</label>
+            <input type="number" id="length" name="length"><br><br>
           </form>
+          <div class="navigation-container">
+            <a class="navigation-button" href="{{ '/' }}">Back</a>
+            <a class="navigation-button" href="{{ '/' }}">Next</a>
+          </div>
+
+          </div>
+
         </div>
       </div>
     </div>

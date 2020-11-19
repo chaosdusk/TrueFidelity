@@ -36,7 +36,7 @@ function setupCanvas(canvas) {
             ctx.stroke();
             // canvas_data.line.push({ "starx": prevX, "starty": prevY, "endx": curX, "endY": curY, "thick": ctx.lineWidth, "color": ctx.strokeStyle });
             ctx.closePath();
-            input.value = Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2).toFixed(2);
+            input.value = Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2).toFixed(0);
         }
     };
 
@@ -49,20 +49,25 @@ function setupCanvas(canvas) {
     };
 }
 
-
+// Select an image
 var imageA = document.getElementById("imageA");
+var imageB = document.getElementById("imageB");
 
 imageA.addEventListener("mousedown", function() {
     console.log("clicked A");
     var rand = Math.floor(Math.random() * 3 + 3);
     console.log(rand)
     document.getElementById("imageAimage").src = "imagedata/" + rand + "/false.png";
+    imageA.nextElementSibling.classList.add("selected");
+    imageB.nextElementSibling.classList.remove("selected");
+
 });
 
-var imageB = document.getElementById("imageB");
 
 imageB.addEventListener("mousedown", function() {
     console.log("clicked B");
+    imageB.nextElementSibling.classList.add("selected");
+    imageA.nextElementSibling.classList.remove("selected");
 });
 
 
