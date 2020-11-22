@@ -1,6 +1,6 @@
 .body-container {
     background-color: yellow;
-    min-height: 100vh;
+    min-height: 100vh; /* TODO: I think from testing, shuld remove this, add flex to body and then flex-grow here */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -8,7 +8,8 @@
 
 .main-container {
     background-color: orange;
-    min-height: 80vh;
+    min-height: 80vh; /* todo also remove this (see previous) need to handle resizing the plots somehow without breaking pixel size?...
+    can use percentages of the size of the square thing? (normalize to 100) */
     display: flex;
     flex-direction: row;
     flex-grow: 1;

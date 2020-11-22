@@ -1,1 +1,2 @@
 FLASK_APP=tf_site.py
+FLASK_ENV=development

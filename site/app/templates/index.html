@@ -1,22 +1,13 @@
-{% extends 'baseNoBody.html' %}
+{% extends 'base.html' %}
 
 {% block head %}
-<!-- TODO -->
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"> -->
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/image-selection.css') }}"> -->
 {% endblock %}
 
-{% block all %}
-<body onload="line()">
-    <div >Yeet</div>
-    Hello World
-
-    <img src="imagedata/false.png" alt="Girl in a jacket" width="500" height="600">
-    <canvas id="paint" width="750" height="450" style="border: 5px solid #000000;">Update your browser for HTML5 support</canvas>
-
-    <form action="/action_page.php">
-        <label for="fname">First name:</label>
-        <input type="text" id="fname" name="fname"><br><br>
-      </form>
-    <script src=" {{ url_for('static', filename='script.js') }}"></script>
-</body>
+{% block body %}
+Hello there!
+<h1>Hi, {{ current_user.username }}!</h1>
+{% for label in labels %}
+<div><p>{{ label.labeler.username }} labeled at {{ label.timestamp }}</p></div>
+{% endfor %}
 {% endblock %}

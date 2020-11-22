@@ -7,13 +7,75 @@ from matplotlib.dates import DateFormatter
 
 from io import BytesIO
 
-from app import app
+from flask import render_template, flash, redirect, make_response, url_for, request
 
+from flask_login import current_user, login_user, logout_user, login_required
+from app.models import User
+
+from app import app, db
+from app.forms import LoginForm, RegistrationForm
+
+from werkzeug.urls import url_parse
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(url_for('index'))
+    # TODO: if there is a next_page and they mess up logging in first time, make sure they redirect later maybe?
+    # It might be that they always get redirected to home anyway
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/index', methods=['GET'])
 @app.route('/', methods=['GET'])
+@login_required
 def index():
-    # This is how you can pass in information for the jinja liquid syntax
-    # return render_template('index.html', tasks=tasks)
+    labels = [
+        {
+            'labeler': {'username': 'Yeet'},
+            'timestamp': '4:20'
+        },
+        {
+            'labeler': {'username': 'Yeet2'},
+            'timestamp': '4:22'
+        }
+    ]
+    return render_template('index.html', labels=labels)
+
+@app.route('/label', methods=['GET'])
+def label_page():
     return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=3)
+
 
 @app.route("/imagedata/<int:amount>/false.png")
 def imagedata_false(amount):
