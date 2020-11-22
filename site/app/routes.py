@@ -72,6 +72,13 @@ def index():
     ]
     return render_template('index.html', labels=labels)
 
+@app.route('/database', methods=['GET'])
+def display_tables():
+    users = User.query.all()
+    print(users)
+    return render_template('tables.html', users=users)
+
+
 @app.route('/label', methods=['GET'])
 def label_page():
     return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=3)
