@@ -7,9 +7,7 @@ from matplotlib.dates import DateFormatter
 
 from io import BytesIO
 
-from flask import Flask, render_template, url_for, request, redirect, jsonify, make_response
-
-app = Flask(__name__)
+from app import app
 
 @app.route('/', methods=['GET'])
 def index():
