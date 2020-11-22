@@ -13,7 +13,7 @@ Users
         <TD class="c1">Username</TD>
         <TD class="c2">id</TD>
         <TD class="c3">Email</TD>
-        <TD class="c4">isAdmin</TD>
+        <TD class="c4">is_admin</TD>
         <TD class="c5">timestamp</TD>
     </TR>
     {% for user in users %}
@@ -21,7 +21,7 @@ Users
         <TD class="c1">{{user.username}}</TD>
         <TD class="c2">{{user.id}}</TD>
         <TD class="c3">{{user.email}}</TD>
-        <TD class="c4">{{user.isAdmin}}</TD>
+        <TD class="c4">{{user.is_admin}}</TD>
         <TD class="c5">{{user.timestamp}}</TD>
     </TR>
     {% endfor %}
@@ -33,14 +33,14 @@ Users
         <TD class="c1">Username</TD>
         <TD class="c2">id</TD>
         <TD class="c3">Email</TD>
-        <TD class="c4">isAdmin</TD>
+        <TD class="c4">is_admin</TD>
     </TR>
     {% for user in users %}
     <TR>
         <TD class="c1">{{user.username}}</TD>
         <TD class="c2">{{user.id}}</TD>
         <TD class="c3">{{user.email}}</TD>
-        <TD class="c4">{{user.isAdmin}}</TD>
+        <TD class="c4">{{user.is_admin}}</TD>
     </TR>
     {% endfor %}
 </table>
