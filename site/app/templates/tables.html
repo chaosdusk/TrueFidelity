@@ -6,7 +6,7 @@
 
 {% block body %}
 Hello there!
-
+<hr>
 Users
 <table>
     <TR>
@@ -16,6 +16,8 @@ Users
         <TD class="c4">is_admin</TD>
         <TD class="c5">timestamp</TD>
     </TR>
+    {% set keys = users[0].__table__.columns._data.keys() if users[0] else None %}
+    {{ keys }}
     {% for user in users %}
     <TR>
         <TD class="c1">{{user.username}}</TD>
@@ -26,21 +28,58 @@ Users
     </TR>
     {% endfor %}
 </table>
+<hr>
 
-
+Labels
 <table>
     <TR>
-        <TD class="c1">Username</TD>
-        <TD class="c2">id</TD>
-        <TD class="c3">Email</TD>
-        <TD class="c4">is_admin</TD>
+        <TD class="c1">user_id</TD>
+        <TD class="c2">image_id</TD>
+        <TD class="c3">image</TD>
+        <TD class="c4">labeler</TD>
+        <TD class="c4">id</TD>
     </TR>
-    {% for user in users %}
+    {% for label in labels %}
     <TR>
-        <TD class="c1">{{user.username}}</TD>
-        <TD class="c2">{{user.id}}</TD>
-        <TD class="c3">{{user.email}}</TD>
-        <TD class="c4">{{user.is_admin}}</TD>
+        <TD class="c1">{{label.user_id}}</TD>
+        <TD class="c2">{{label.image_id}}</TD>
+        <TD class="c3">{{label.image}}</TD>
+        <TD class="c4">{{label.labeler}}</TD>
+        <TD class="c5">{{label.id}}</TD>
+    </TR>
+    {% endfor %}
+</table>
+<hr>
+
+Image
+<table>
+    <TR>
+        <TD class="c1">id</TD>
+        <TD class="c2">batch_id</TD>
+        <TD class="c3">batch</TD>
+    </TR>
+    {% for image in images %}
+    <TR>
+        <TD class="c1">{{image.id}}</TD>
+        <TD class="c2">{{image.batch_id}}</TD>
+        <TD class="c3">{{image.batch}}</TD>
+    </TR>
+    {% endfor %}
+</table>
+<hr>
+
+Batch
+<table>
+    <TR>
+        <TD class="c1">id</TD>
+        <TD class="c2">name</TD>
+        <TD class="c3">description</TD>
+    </TR>
+    {% for batch in batches %}
+    <TR>
+        <TD class="c1">{{batch.id}}</TD>
+        <TD class="c2">{{batch.name}}</TD>
+        <TD class="c3">{{batch.description}}</TD>
     </TR>
     {% endfor %}
 </table>

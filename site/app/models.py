@@ -42,12 +42,12 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'))
-    dose_reduction = db.Column(db.Numeric)
-    reconstruction = db.Column(db.String(128))
+    dose_reduction = db.Column(db.Float)
+    reconstruction = db.Column(db.Float)
     attenuation = db.Column(db.String(128))
-    lesion_size_mm = db.Column(db.Numeric)
+    lesion_size_mm = db.Column(db.Float)
     size_measurement = db.Column(db.Integer)
-
+    filename = db.Column(db.String(64))
     labels = db.relationship('Label', backref='image', lazy='dynamic')
 
     def __repr__(self):

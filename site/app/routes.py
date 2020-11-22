@@ -10,7 +10,7 @@ from io import BytesIO
 from flask import render_template, flash, redirect, make_response, url_for, request
 
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Label, Image, Batch
 
 from app import app, db
 from app.forms import LoginForm, RegistrationForm
@@ -75,8 +75,12 @@ def index():
 @app.route('/database', methods=['GET'])
 def display_tables():
     users = User.query.all()
-    print(users)
-    return render_template('tables.html', users=users)
+    labels = Label.query.all()
+    images = Image.query.all()
+    batches = Batch.query.all()
+    print("test")
+    print(users[0].__table__.columns._data.keys())
+    return render_template('tables.html', users=users, labels=labels, images=images, batches=batches)
 
 
 @app.route('/label', methods=['GET'])
