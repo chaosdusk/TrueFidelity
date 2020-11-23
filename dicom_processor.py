@@ -62,5 +62,5 @@ size = lesion_sizes[lesion_index % 5]
 
 image_number = 0
 
-'''with open('./images/{}_{}_{}_{}_{}.pickle'.format(directories[image_index][8:], hu, size, 'lesion', image_number), 'wb') as handle:
-    pickle.dump(noise, handle)'''
+with open('./images/{}_{}_{}_{}_{}.pickle'.format(directories[image_index][8:], hu, size, 'lesion', image_number), 'wb') as handle:
+    pickle.dump(noise, handle)
