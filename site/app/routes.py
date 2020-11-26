@@ -1,6 +1,9 @@
 import datetime
 import random
 
+import matplotlib.pyplot as plt
+import pickle as pl
+
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
@@ -85,24 +88,21 @@ def display_tables():
 
 @app.route('/label', methods=['GET'])
 def label_page():
-    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=3)
+    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=120)
 
 
-@app.route("/imagedata/<int:amount>/false.png")
-def imagedata_false(amount):
-    fig=Figure()
+# wl and ww should be between 0-100
+@app.route("/imagedata/<int:wl>/<int:ww>/false.png")
+def imagedata_false(wl, ww):
+    fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
-    x=[]
-    y=[]
-    now=datetime.datetime.now()
-    delta=datetime.timedelta(days=1)
-    for i in range(amount):
-        x.append(now)
-        now+=delta
-        y.append(random.randint(0, 1000))
-    ax.plot_date(x, y, '-', color="red")
-    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    fig.autofmt_xdate()
+    with app.open_resource('static\\images\\1\\test.pickle') as f:
+        fig_handle = pl.load(f)
+        vcenter = wl * 255 / 100
+        vmin = int(vcenter - ww * 255 / 100 / 2)
+        vmax = int(vcenter + ww * 255 / 100 / 2)
+        print(vmin, vmax)
+        ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
     canvas.print_png(png_output)

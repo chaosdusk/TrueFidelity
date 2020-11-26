@@ -11,22 +11,22 @@
     <div class="center-container">
     <div class="question-container" style="flex-direction: {{ 'row' if trueFirst else 'row-reverse' }}" >
         <div class="image-container">
-          <img id="imageBimage" src="imagedata/true.png"  alt="Image B" width="500" height="500" draggable="false">
+          <img id="imageBimage" src="imagedata/50/50/false.png"  alt="Image B" width="500" height="500" draggable="false">
           <canvas id="imageB" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
           <div class="adjustment-container selected">
             <div class="range-input">
               <input type="range" id="imageBww" name="ww"
-                    min="0" max="100" value="50" step="1" oninput="helloWorld(this.value, 'imageBimage')">
-              <label for="imageBww">Range</label>
+                    min="0" max="100" value="50" step="1" oninput="updateWW(this.value, 'imageBimage')">
+              <label for="imageBww">WW</label>
             </div>
             <div class="range-input">
               <input type="range" id="imageBwl" name="wl"
-                    min="0" max="100" value="50" step="1">
-              <label for="imageBwl">Range</label>
+                    min="0" max="100" value="50" step="1" oninput="updateWL(this.value, 'imageBimage')">
+              <label for="imageBwl">WL</label>
             </div>
           </div>
         </div>        <div class="image-container">
-          <img id="imageAimage" src="imagedata/{{ yeet }}/false.png" alt="Image A" width="500" height="500" draggable="false">
+          <img id="imageAimage" src="imagedata/50/50/false.png" alt="Image A" width="500" height="500" draggable="false">
           <canvas id="imageA" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
           <div class="adjustment-container">Up Down</div>
         </div>
