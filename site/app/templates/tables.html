@@ -9,6 +9,9 @@ Hello there!
 <hr>
 Users
 <table>
+    {% if users|length > 0 %}
+    {% set userkeys = users[0].__table__.columns._data.keys() %}
+    {% endif %}
     {% for user in users %}
     {% if loop.first %}
     {% set userkeys = user.__table__.columns._data.keys() %}
@@ -31,6 +34,9 @@ Users
 
 Labels
 <table>
+    {% if labels|length > 0 %}
+    {% set labelkeys = labels[0].__table__.columns._data.keys() %}
+    {% endif %}
     {% for label in labels %}
     {% if loop.first %}
     {% set labelkeys = label.__table__.columns._data.keys() %}
@@ -53,9 +59,11 @@ Labels
 
 Image
 <table>
+    {% if images|length > 0 %}
+    {% set imagekeys = images[0].__table__.columns._data.keys() %}
+    {% endif %}
     {% for image in images %}
     {% if loop.first %}
-    {% set imagekeys = image.__table__.columns._data.keys() %}
     {{ imagekeys }}
     <TR>
         {% for key in imagekeys %}
@@ -75,9 +83,11 @@ Image
 
 Batch
 <table>
+    {% if batches|length > 0 %}
+    {% set batchkeys = batches[0].__table__.columns._data.keys() %}
+    {% endif %}
     {% for batch in batches %}
     {% if loop.first %}
-    {% set batchkeys = batch.__table__.columns._data.keys() %}
     {{ batchkeys }}
     <TR>
         {% for key in batchkeys %}

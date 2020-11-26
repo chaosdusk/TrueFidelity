@@ -62,4 +62,4 @@ class Batch(db.Model):
     images = db.relationship('Image', backref='batch', lazy='dynamic')
 
     def __repr__(self):
-        return '<Batch: {}'.format(self.name)
+        return '<Batch: {}>'.format(self.name)

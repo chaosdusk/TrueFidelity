@@ -81,8 +81,7 @@ def display_tables():
     labels = Label.query.all()
     images = Image.query.all()
     batches = Batch.query.all()
-    print("test")
-    print(users[0].__table__.columns._data.keys())
+    print(batches)
     return render_template('tables.html', users=users, labels=labels, images=images, batches=batches)
 
 
