@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <!-- jQuery library -->
+    <!-- jQuery library bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Latest compiled JavaScript -->
+    <!-- Latest compiled JavaScript boostrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- TODO -->
@@ -19,15 +19,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">TrueFidelity</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}">TrueFidelity</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <!-- <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li> -->
@@ -35,12 +33,11 @@
                 <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {% else %}
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Page 1
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"> {{ current_user.username }} </span>
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-                        <li><a href="#">Page 1-2</a></li>
-                        <li><a href="#">Page 1-3</a></li>
+                        <!-- <li><a href="#">Additional Options like change password </a></li> -->
                     </ul>
                 </li>
                 {% endif %}
