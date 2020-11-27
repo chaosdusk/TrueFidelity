@@ -10,10 +10,12 @@
   <div class="main-container">
     <div class="center-container">
       <div class="question-container" style="flex-direction: {{ 'row' if putCorrectLeft else 'row-reverse' }}" >
+        {% set imageASide = 0 if putCorrectLeft else 1 %}
+        {% set imageBSide = 1 if putCorrectLeft else 0 %}
         <div class="image-container">
           <img id="imageAimage" src="/imagedata/{{image.id}}/50/50/true.png" width="500" height="500" draggable="false">
           <canvas id="imageA" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
-          <div class="adjustment-container">
+          <div class="adjustment-container {{ 'selected' if currentLabel and currentLabel.side_user_clicked == imageASide }}">
             <div class="range-input">
               <input type="range" id="imageAww" name="ww"
                     min="0" max="100" value="50" step="1" oninput="updateWW(this.value, 'imageAimage')">
@@ -24,14 +26,15 @@
                     min="0" max="100" value="50" step="1" oninput="updateWL(this.value, 'imageAimage')">
               <label for="imageAwl">WL</label>
             </div>
-            Left or right {{ 0 if putCorrectLeft else 1 }}
+            Left or right {{ imageASide }}
+            <!-- TODO! Write a script that chagnes opacity / visibility for both only after both hvae loaded (since this first one always loads first) -->
           </div>
         </div>
 
         <div class="image-container">
           <img id="imageBimage" src="/imagedata/{{image.id}}/50/50/false.png" width="500" height="500" draggable="false">
           <canvas id="imageB" class="canvas-ruler" width="500" height="500" draggable="false">Update your browser for HTML5 support</canvas>
-          <div class="adjustment-container">
+          <div class="adjustment-container {{ 'selected' if currentLabel and currentLabel.side_user_clicked == imageBSide }}">
             <div class="range-input">
               <input type="range" id="imageBww" name="ww"
                     min="0" max="100" value="50" step="1" oninput="updateWW(this.value, 'imageBimage')">
@@ -49,7 +52,7 @@
           Selected: {{ putCorrectLeft }}
           <form onsubmit="return false;">
             <label for="length">Length:</label>
-            <input type="number" id="length" name="length"><br><br>
+            <input type="number" id="length" name="length" {% if currentLabel %} value={{currentLabel.measurement}} {% endif %}>
           </form>
           <div class="navigation-container">
             <a class="navigation-button" href="{{ '/' }}">Back</a>
@@ -62,7 +65,17 @@
     </div>
     <div class="sidebar-container">
       sidebar
-      {{ queryLabels }}
+      {{ labeledImageIds }}
+      {% for i in images %}
+      <div>
+        {{ i }} and labeled? {{ 'yes' if i.id in labeledImageIds else 'no' }}
+        {% if loop.index0 == index %}
+        current one!!!!
+        {% endif %}
+        <a href="{{url_for('label_path', batch_id=batch_id, index=loop.index0)}}">link to {{loop.index0}}</a>
+      </div>
+      <hr>
+      {% endfor %}
     </div>
   </div>
 </div>

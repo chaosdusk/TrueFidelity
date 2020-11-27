@@ -108,11 +108,22 @@ def label_path(batch_id, index):
     image = images[index]
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).join(Image).filter_by(batch_id=batch_id).all()
+    currentLabel = None
     labeledImageIds = set()
     for label in queryLabels:
+        if (label.image_id == image.id):
+            if (currentLabel is not None):
+                print("Database error: multiple labels by same user for image, using last one")
+            currentLabel = label
         labeledImageIds.add(label.image_id)
 
-    return render_template('image-selection.html', putCorrectLeft=bool(image.side_with_lesion == constants.LEFT), image=image, images=images, queryLabels=queryLabels)
+    return render_template('image-selection.html',  putCorrectLeft=bool(image.side_with_lesion == constants.LEFT),
+                                                    index=index,
+                                                    image=image,
+                                                    currentLabel=currentLabel,
+                                                    images=images,
+                                                    labeledImageIds=labeledImageIds,
+                                                    batch_id=batch_id)
 
 # wl and ww should be between 0-100
 @app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png", methods=['GET'])
