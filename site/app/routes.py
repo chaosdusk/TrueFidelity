@@ -37,7 +37,7 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(url_for('index'))
+        return redirect(next_page)
     # TODO: if there is a next_page and they mess up logging in first time, make sure they redirect later maybe?
     # It might be that they always get redirected to home anyway
     return render_template('login.html', title='Sign In', form=form)
@@ -86,15 +86,35 @@ def display_tables():
     print(batches)
     return render_template('tables.html', users=users, labels=labels, images=images, batches=batches)
 
-
+# TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
 @app.route('/label', methods=['GET'])
-def label_page():
+def label_home():
     return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=120)
 
 
+@app.route('/label/<int:batch_id>/<int:index>')
+@login_required
+def label_path(batch_id, index):
+    # if index out of bounds, redirect to 0
+    images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
+    if (index >= len(images) or index < 0):
+        if (index == 0):
+            # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
+            return "Batch is empty"
+        else:
+            return redirect(url_for(f'/label/{batch_id}/0'))
+
+    queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(batch_id=batch_id).join(Image).all()
+    labeledImageIds = set()
+    for label in queryLabels:
+        labeledImageIds.add(label.image_id)
+
+    print(current_user)
+    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)))
+
 # wl and ww should be between 0-100
-@app.route("/imagedata/<int:wl>/<int:ww>/false.png")
-def imagedata_false(wl, ww):
+@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png")
+def imagedata_false(image_id, wl, ww):
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
     with app.open_resource('static\\images\\1\\test.pickle') as f:
@@ -104,6 +124,7 @@ def imagedata_false(wl, ww):
         vmax = int(vcenter + ww * 255 / 100 / 2)
         print(vmin, vmax)
         ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
     canvas.print_png(png_output)
@@ -111,21 +132,18 @@ def imagedata_false(wl, ww):
     response.headers['Content-Type'] = 'image/png'
     return response
 
-@app.route("/imagedata/true.png")
-def imagedata_true():
-    fig=Figure()
+@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/true.png")
+def imagedata_true(image_id, wl, ww):
+    fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
-    x=[]
-    y=[]
-    now=datetime.datetime.now()
-    delta=datetime.timedelta(days=1)
-    for i in range(10):
-        x.append(now)
-        now+=delta
-        y.append(random.randint(0, 1000))
-    ax.plot_date(x, y, '-', color="green")
-    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    fig.autofmt_xdate()
+    with app.open_resource('static\\images\\1\\test.pickle') as f:
+        fig_handle = pl.load(f)
+        vcenter = wl * 255 / 100
+        vmin = int(vcenter - ww * 255 / 100 / 2)
+        vmax = int(vcenter + ww * 255 / 100 / 2)
+        print(vmin, vmax)
+        ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
     canvas.print_png(png_output)

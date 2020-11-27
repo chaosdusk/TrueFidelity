@@ -18,7 +18,7 @@ def main():
     plt.imshow(fig_handle, cmap='gray', vmin=0, vmax=255)
     plt.show()
 
-# Image upload needs to be in a random order so that index doesn't give away which is which
+# TODO: Image upload needs to be in a random order so that index doesn't give away which is which
 def upload_all(folder, batch_id):
     b = Batch.query.get(batch_id)
     if b is None:

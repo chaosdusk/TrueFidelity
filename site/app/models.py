@@ -1,3 +1,5 @@
+import random
+
 from app import db, login
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -35,7 +37,6 @@ class Label(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
-    side_with_lesion = db.Column(db.SmallInteger)
     side_user_clicked = db.Column(db.SmallInteger)
     measurement = db.Column(db.Integer) # Chose Integer > Float or Numeric since no need for decimals
 
@@ -52,10 +53,17 @@ class Image(db.Model):
     lesion_size_mm = db.Column(db.Float)
     size_measurement = db.Column(db.Integer)
     filename = db.Column(db.String(64))
+    side_with_lesion = db.Column(db.SmallInteger, default=lambda: int(random.getrandbits(1)))
     labels = db.relationship('Label', backref='image', lazy='dynamic')
 
     def __repr__(self):
         return '<Image, id: {} dose: {} size: {} reconstruction {}>'.format(self.id, self.dose, self.lesion_size_mm, self.reconstruction)
+
+    def getFilePath(self):
+        return f'images/{self.batch_id}/{self.filename}'
+
+    def getFakeFilePath(self):
+        return f'images/{self.batch_id}/fake/{self.reconstruction}_{self.dose}.pickle'
 
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
