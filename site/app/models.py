@@ -46,7 +46,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'))
-    dose_reduction = db.Column(db.String(64))
+    dose = db.Column(db.String(64))
     hu = db.Column(db.Integer)
     reconstruction = db.Column(db.String(128))
     lesion_size_mm = db.Column(db.Float)
@@ -55,7 +55,7 @@ class Image(db.Model):
     labels = db.relationship('Label', backref='image', lazy='dynamic')
 
     def __repr__(self):
-        return '<Image, id: {} dose: {} size: {}>'.format(self.id, self.dose_reduction, self.lesion_size_mm)
+        return '<Image, id: {} dose: {} size: {} reconstruction {}>'.format(self.id, self.dose, self.lesion_size_mm, self.reconstruction)
 
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)

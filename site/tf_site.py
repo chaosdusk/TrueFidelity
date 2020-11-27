@@ -1,9 +1,17 @@
 from app import app, db
+import image_uploader
 from app.models import User, Label, Image, Batch
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Label': Label, 'Image': Image, 'Batch': Batch, 'clear_data': clear_data}
+    return {'db': db,
+            'User': User,
+            'Label': Label,
+            'Image': Image,
+            'Batch': Batch,
+            'clear_data': clear_data,
+            'iu': image_uploader
+            }
 
 def clear_data():
     session = db.session
