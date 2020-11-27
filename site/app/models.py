@@ -39,9 +39,10 @@ class Label(db.Model):
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
     side_user_clicked = db.Column(db.SmallInteger)
     measurement = db.Column(db.Integer) # Chose Integer > Float or Numeric since no need for decimals
+    instance = db.Column(db.SmallInteger)
 
     def __repr__(self):
-        return '<Label {}, user {}, image {}, side {}, measurement {}>'.format(self.timestamp, self.user_id, self.image_id, self.side_user_clicked, self.measurement)
+        return '<Label {}, user {}, image {}, instance {}, side {}, measurement {}>'.format(self.timestamp, self.user_id, self.image_id, self.instance, self.side_user_clicked, self.measurement)
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
