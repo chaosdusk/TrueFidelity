@@ -4,6 +4,8 @@ import random
 import matplotlib.pyplot as plt
 import pickle as pl
 
+from app import constants
+
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter

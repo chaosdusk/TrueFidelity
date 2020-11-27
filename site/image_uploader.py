@@ -20,7 +20,21 @@ def upload_all(folder, batch_id):
     pass
 
 def upload(image_file, batch_id):
-    pass
+    b = Batch.query.get(batch_id)
+    if b is None:
+        raise Exception(f"Batch_id '{batch_id}'' does not exist! Create this batch first or select a different one")
+    print(f"Uploading image to batch {batch_id}: {b.name}")
+    __upload_helper(image_file, batch_id)
+
+def __upload_helper(image_file, batch_id):
+    base = os.path.basename(image_file)
+    attributes = os.path.splitext(base)[0].split(";")
+    print("Attributes:", attributes)
+TF_LOW_30RED_8221;-10;lesion;9.5;0.pickle
+    i = Image(  batch_id=batch_id,
+                reconstruction=attributes[0],
+                attenuation=attributes[1],
+                )
 
 def create_batch(batch_name, batch_description):
     b = Batch(name=batch_name, description=batch_description)
@@ -28,4 +42,5 @@ def create_batch(batch_name, batch_description):
     db.session.commit()
     print(f"Created batch: {b.id}, {b.name}")
 
-main()
+if __name__ == "__main__":
+    main()

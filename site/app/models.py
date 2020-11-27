@@ -3,6 +3,8 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+from app import constants
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
@@ -14,6 +16,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     is_admin = db.Column(db.Boolean, default=False)
+    status = db.Column(db.SmallInteger, default=constants.INACTIVE)
     # TODO: Might need to specify cascade delete if plan to enable user deletion
     labels = db.relationship('Label', backref='labeler', lazy='dynamic')
 
@@ -32,7 +35,8 @@ class Label(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'))
-    is_correct = db.Column(db.Boolean, nullable=False)
+    side_with_lesion = db.Column(db.SmallInteger)
+    side_user_clicked = db.Column(db.SmallInteger)
     measurement = db.Column(db.Integer) # Chose Integer > Float or Numeric since no need for decimals
 
     def __repr__(self):
@@ -44,7 +48,6 @@ class Image(db.Model):
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'))
     dose_reduction = db.Column(db.Float)
     reconstruction = db.Column(db.Float)
-    attenuation = db.Column(db.String(128))
     lesion_size_mm = db.Column(db.Float)
     size_measurement = db.Column(db.Integer)
     filename = db.Column(db.String(64))
