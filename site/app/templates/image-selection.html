@@ -51,7 +51,7 @@
         <div class="choice-container">
           <div class="inner-choice-container" style="display: flex; justify-content: space-evenly;">
             <div class="navigation-container">
-              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1)}}">Back</a>
+              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1, instance=instance)}}">Back</a>
             </div>
             <div class="spacer"></div>
             <div class="spacer">
@@ -91,14 +91,9 @@
               </div>
             </div>
             <div class="navigation-container">
-              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1)}}">Next</a>
+              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1, instance=instance)}}">Next</a>
             </div>
           </div>
-
-          <!-- <div class="navigation-container">
-            <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1)}}">Back</a>
-            <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1)}}">Next</a>
-          </div> -->
         </div>
 
       </div>
@@ -112,7 +107,7 @@
         {% if loop.index0 == index %}
         current one!!!!
         {% endif %}
-        <a href="{{url_for('label_path', batch_id=batch_id, index=loop.index0)}}">link to {{loop.index0}}</a>
+        <a href="{{url_for('label_path', batch_id=batch_id, index=loop.index0, instance=instance)}}">link to {{loop.index0}}</a>
       </div>
       <hr>
       {% endfor %}

@@ -92,10 +92,11 @@ def label_home():
     return "label home"
 
 
-@app.route('/label/<int:batch_id>/<int:index>', methods=['GET', 'POST'])
+@app.route('/label/<int:batch_id>/<int:instance>/<int:index>', methods=['GET', 'POST'])
 @login_required
-def label_path(batch_id, index):
-    form = LabelForm()
+def label_path(batch_id, instance, index):
+    if (instance >= constants.NUM_INSTANCES):
+        return redirect(url_for('label_home'))
 
     # if index out of bounds, redirect to 0
     images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
@@ -105,17 +106,18 @@ def label_path(batch_id, index):
             # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
             return "Batch is empty"
         else:
-            return redirect(url_for('label_path', batch_id=batch_id, index=0))
+            return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=0))
 
     # Get image of this index
     image = images[index]
 
+    form = LabelForm()
     if form.validate_on_submit():
-        label = Label.query.filter_by(user_id=current_user.id).filter_by(image_id=image.id).first()
+        label = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).filter_by(image_id=image.id).first()
         print("Previous label: ", label)
         if (label is None):
             print("Creating new label")
-            label = Label(user_id=current_user.id, image_id=image.id)
+            label = Label(user_id=current_user.id, image_id=image.id, instance=instance)
         label.side_user_clicked = form.sideChosen.data
         label.measurement = form.length.data
         label.timestamp = datetime.utcnow()
@@ -123,9 +125,9 @@ def label_path(batch_id, index):
         db.session.commit()
         print("new label:", label)
         flash(f'Saved label for image {image.id} successfully')
-        return redirect(url_for('label_path', batch_id=batch_id, index=index))
+        return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index))
 
-    queryLabels = Label.query.filter_by(user_id=current_user.id).join(Image).filter_by(batch_id=batch_id).all()
+    queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
     currentLabel = None
     labeledImageIds = set()
     for label in queryLabels:
@@ -146,7 +148,8 @@ def label_path(batch_id, index):
                                                     images=images,
                                                     labeledImageIds=labeledImageIds,
                                                     batch_id=batch_id,
-                                                    form=form)
+                                                    form=form,
+                                                    instance=instance)
 
 # wl and ww should be between 0-100
 @app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png", methods=['GET'])
