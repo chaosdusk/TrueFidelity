@@ -55,11 +55,6 @@ var imageB = document.getElementById("imageB");
 
 imageA.addEventListener("mousedown", function() {
     console.log("clicked A");
-    var ww = Math.floor(Math.random() * 100);
-    var wl = Math.floor(Math.random() * 100);
-    console.log(ww)
-    console.log(wl)
-    document.getElementById("imageAimage").src = "imagedata/" + wl + "/" + ww + "/false.png";
     imageA.nextElementSibling.classList.add("selected");
     imageB.nextElementSibling.classList.remove("selected");
 
@@ -76,23 +71,23 @@ imageB.addEventListener("mousedown", function() {
 // Range change values
 function helloWorld(val, image) {
     console.log(val);
-    document.getElementById(image).src = "imagedata/" + val + "/" + val + "/false.png";
+    document.getElementById(image).src = "/imagedata/" + val + "/" + val + "/false.png";
 }
 
 function updateWW(ww, image) {
     console.log(ww);
     const prevSrc = document.getElementById(image).src;
     console.log("Previous src", prevSrc);
-    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
     console.log(match)
-    document.getElementById(image).src = "imagedata/" + match[1] + "/" + ww + "/" + match[3];
+    document.getElementById(image).src = "/imagedata/" + match[1] + "/" + match[2] + "/" + ww + "/" + match[4];
 }
 
 function updateWL(wl, image) {
     console.log(wl);
     const prevSrc = document.getElementById(image).src;
     console.log("Previous src", prevSrc);
-    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
     console.log(match)
-    document.getElementById(image).src = "imagedata/" + wl + "/" + match[2] + "/" + match[3];
+    document.getElementById(image).src = "/imagedata/" + match[1] + "/" + wl + "/" + match[3] + "/" + match[4];
 }

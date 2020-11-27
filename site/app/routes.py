@@ -89,10 +89,10 @@ def display_tables():
 # TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
 @app.route('/label', methods=['GET'])
 def label_home():
-    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)), yeet=120)
+    return "label home"
 
 
-@app.route('/label/<int:batch_id>/<int:index>')
+@app.route('/label/<int:batch_id>/<int:index>', methods=['GET'])
 @login_required
 def label_path(batch_id, index):
     # if index out of bounds, redirect to 0
@@ -102,22 +102,33 @@ def label_path(batch_id, index):
             # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
             return "Batch is empty"
         else:
-            return redirect(url_for(f'/label/{batch_id}/0'))
+            return redirect(url_for('label_path', batch_id=batch_id, index=0))
 
-    queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(batch_id=batch_id).join(Image).all()
+    # Get image of this index
+    image = images[index]
+
+    queryLabels = Label.query.filter_by(user_id=current_user.id).join(Image).filter_by(batch_id=batch_id).all()
     labeledImageIds = set()
     for label in queryLabels:
         labeledImageIds.add(label.image_id)
 
-    print(current_user)
-    return render_template('image-selection.html', trueFirst=bool(random.getrandbits(1)))
+    return render_template('image-selection.html', putCorrectLeft=bool(image.side_with_lesion == constants.LEFT), image=image, images=images, queryLabels=queryLabels)
 
 # wl and ww should be between 0-100
-@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png")
+@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png", methods=['GET'])
 def imagedata_false(image_id, wl, ww):
+    image = Image.query.get(image_id)
+    # TODO: Make more robust?
+    if (image is None):
+        return "Invalid image id"
+
+
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
-    with app.open_resource('static\\images\\1\\test.pickle') as f:
+
+    image_filepath = image.getFakeFilePath()
+    print("FILEPATH:", image_filepath)
+    with app.open_resource(f'static\\{image_filepath}') as f:
         fig_handle = pl.load(f)
         vcenter = wl * 255 / 100
         vmin = int(vcenter - ww * 255 / 100 / 2)
@@ -132,11 +143,20 @@ def imagedata_false(image_id, wl, ww):
     response.headers['Content-Type'] = 'image/png'
     return response
 
-@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/true.png")
+@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/true.png", methods=['GET'])
 def imagedata_true(image_id, wl, ww):
+    image = Image.query.get(image_id)
+    # TODO: Make more robust?
+    if (image is None):
+        return "Invalid image id"
+
+
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
-    with app.open_resource('static\\images\\1\\test.pickle') as f:
+
+    image_filepath = image.getFilePath()
+    print("FILEPATH:", image_filepath)
+    with app.open_resource(f'static\\{image_filepath}') as f:
         fig_handle = pl.load(f)
         vcenter = wl * 255 / 100
         vmin = int(vcenter - ww * 255 / 100 / 2)
