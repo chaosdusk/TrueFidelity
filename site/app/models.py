@@ -48,6 +48,7 @@ class Image(db.Model):
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'))
     dose_reduction = db.Column(db.Float)
     reconstruction = db.Column(db.Float)
+    hu = db.Column(db.Integer)
     lesion_size_mm = db.Column(db.Float)
     size_measurement = db.Column(db.Integer)
     filename = db.Column(db.String(64))
