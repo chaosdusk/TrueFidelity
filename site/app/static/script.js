@@ -85,6 +85,8 @@ function helloWorld(val) {
     console.log(val);
 }
 
+
+// Deprecated versions since only need one
 function updateWW(ww, image) {
     console.log(ww);
     const prevSrc = document.getElementById(image).src;
@@ -101,4 +103,27 @@ function updateWL(wl, image) {
     const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
     console.log(match)
     document.getElementById(image).src = "/imagedata/" + match[1] + "/" + wl + "/" + match[3] + "/" + match[4];
+}
+
+
+const imageAimage = document.getElementById('imageAimage')
+const imageBimage = document.getElementById('imageBimage')
+function updateWW(ww) {
+    const AprevSrc = imageAimage.src;
+    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    imageAimage.src = "/imagedata/" + Amatch[1] + "/" + Amatch[2] + "/" + ww + "/" + Amatch[4];
+
+    const BprevSrc = imageBimage.src;
+    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    imageBimage.src = "/imagedata/" + Bmatch[1] + "/" + Bmatch[2] + "/" + ww + "/" + Bmatch[4];
+}
+
+function updateWL(wl) {
+    const AprevSrc = imageAimage.src;
+    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    imageAimage.src = "/imagedata/" + Amatch[1] + "/" + wl + "/" + Amatch[3] + "/" + Amatch[4];
+
+    const BprevSrc = imageBimage.src;
+    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    imageBimage.src = "/imagedata/" + Bmatch[1] + "/" + wl + "/" + Bmatch[3] + "/" + Bmatch[4];
 }

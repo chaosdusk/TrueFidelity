@@ -64,13 +64,9 @@
     border: none;
 }
 
-.adjustment-container {
-    align-self: center;
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    align-items: center;
-    height: 50px;
+.selected-indicator {
+    height: 25px;
+    margin-bottom: 20px;
 }
 
 
@@ -93,4 +89,37 @@ img, div {
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+#sideChosen {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+#sideChosen li {
+    display: inline-block;
+}
+
+#sideChosen-container {
+    display: flex;
+}
+
+#choice-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spacer {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.adjustment-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 15px;
 }
