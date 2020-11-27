@@ -11,6 +11,7 @@ function setupCanvas(canvas) {
     var curX, curY, prevX, prevY;
     var hold = false;
     ctx.lineWidth = 2;
+    ctx.strokeStyle = "#FF0000";
 
     var input = document.getElementById("length")
 
@@ -36,7 +37,7 @@ function setupCanvas(canvas) {
             ctx.stroke();
             // canvas_data.line.push({ "starx": prevX, "starty": prevY, "endx": curX, "endY": curY, "thick": ctx.lineWidth, "color": ctx.strokeStyle });
             ctx.closePath();
-            input.value = Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2).toFixed(0);
+            input.value = (Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2) / width * 100).toFixed(0);
         }
     };
 
