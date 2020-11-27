@@ -27,11 +27,22 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Email address already linked to an account.')
 
-class LabelForm(FlaskForm):
-    length = IntegerField('Length', validators=[DataRequired()])
-    sideChosen = RadioField('Side with lesion', choices=[(0, "left"), (1, "right")], validators=[DataRequired()])
+class FieldsRequiredForm(FlaskForm):
+    """Require all fields to have content. This works around the bug that WTForms radio
+    fields don't honor the `DataRequired` or `InputRequired` validators.
+    """
+
+    class Meta:
+        def render_field(self, field, render_kw):
+            render_kw.setdefault('required', True)
+            return super().render_field(field, render_kw)
+
+class LabelForm(FieldsRequiredForm):
+    length = IntegerField('Length')
+    sideChosen = RadioField('Side with lesion', choices=[(0, "left"), (1, "right")])
     submit = SubmitField('Save')
 
     def validate_length(self, length):
         if length < 0 or length > 200:
             raise ValidationError('Length is not valid')
+

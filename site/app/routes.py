@@ -92,7 +92,7 @@ def label_home():
     return "label home"
 
 
-@app.route('/label/<int:batch_id>/<int:index>', methods=['GET'])
+@app.route('/label/<int:batch_id>/<int:index>', methods=['GET', 'POST'])
 @login_required
 def label_path(batch_id, index):
     form = LabelForm()

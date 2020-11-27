@@ -58,7 +58,7 @@ imageA.addEventListener("mousedown", function() {
     console.log("clicked A");
     imageA.nextElementSibling.classList.add("selected");
     imageB.nextElementSibling.classList.remove("selected");
-
+    document.getElementById('sideChosen-' + imageA.getAttribute('value')).checked = true;
 });
 
 
@@ -66,13 +66,12 @@ imageB.addEventListener("mousedown", function() {
     console.log("clicked B");
     imageB.nextElementSibling.classList.add("selected");
     imageA.nextElementSibling.classList.remove("selected");
+    document.getElementById('sideChosen-' + imageB.getAttribute('value')).checked = true;
 });
 
-
 // Range change values
-function helloWorld(val, image) {
+function helloWorld(val) {
     console.log(val);
-    document.getElementById(image).src = "/imagedata/" + val + "/" + val + "/false.png";
 }
 
 function updateWW(ww, image) {
