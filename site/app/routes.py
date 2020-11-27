@@ -31,7 +31,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'error')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
@@ -52,7 +52,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -124,7 +124,7 @@ def label_path(batch_id, instance, index):
         db.session.add(label)
         db.session.commit()
         print("new label:", label)
-        flash(f'Saved label for image {image.id} successfully')
+        flash(f'Saved label for image {image.id} successfully', 'success')
         return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index))
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
