@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import random
 
 import matplotlib.pyplot as plt
@@ -118,6 +118,7 @@ def label_path(batch_id, index):
             label = Label(user_id=current_user.id, image_id=image.id)
         label.side_user_clicked = form.sideChosen.data
         label.measurement = form.length.data
+        label.timestamp = datetime.utcnow()
         db.session.add(label)
         db.session.commit()
         print("new label:", label)
