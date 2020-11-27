@@ -24,7 +24,6 @@
     display: flex;
     flex-grow: 1;
     justify-content: center;
-    padding: 50px;
     overflow-y: auto;
 }
 
@@ -131,4 +130,5 @@ img, div {
     flex-direction: column;
     justify-content: space-evenly;
     padding-left: 15px;
+    padding-right: 15px;
 }
