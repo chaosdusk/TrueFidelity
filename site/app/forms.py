@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, RadioField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 
@@ -26,3 +26,12 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Email address already linked to an account.')
+
+class LabelForm(FlaskForm):
+    length = IntegerField('Length', validators=[DataRequired()])
+    sideChosen = RadioField('Side with lesion', choices=[(0, "left"), (1, "right")], validators=[DataRequired()])
+    submit = SubmitField('Save')
+
+    def validate_length(self, length):
+        if length < 0 or length > 200:
+            raise ValidationError('Length is not valid')

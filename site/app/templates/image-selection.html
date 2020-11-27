@@ -51,9 +51,25 @@
 
         <div class="choice-container">
           Selected: {{ putCorrectLeft }}
-          <form onsubmit="return false;">
-            <label for="length">Length:</label>
-            <input type="number" id="length" name="length" {% if currentLabel %} value={{currentLabel.measurement}} {% endif %}>
+          <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+              {{ form.length.label }}<br>
+              {{ form.length() }}<br>
+              {% for error in form.length.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+            </p>
+            <p>
+              {{ form.sideChosen.label }}<br>
+              {{ form.sideChosen(default=1) }}<br>
+              {% for error in form.sideChosen.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+            <!-- <label for="length">Length:</label>
+            <input type="number" id="length" name="length" {% if currentLabel %} value={{currentLabel.measurement}} {% endif %}> -->
           </form>
           <div class="navigation-container">
             <a class="navigation-button" href="{{ '/' }}">Back</a>

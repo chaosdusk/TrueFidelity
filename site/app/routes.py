@@ -18,7 +18,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Label, Image, Batch
 
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, LabelForm
 
 from werkzeug.urls import url_parse
 
@@ -95,6 +95,8 @@ def label_home():
 @app.route('/label/<int:batch_id>/<int:index>', methods=['GET'])
 @login_required
 def label_path(batch_id, index):
+    form = LabelForm()
+
     # if index out of bounds, redirect to 0
     images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
     if (index >= len(images) or index < 0):
@@ -115,6 +117,10 @@ def label_path(batch_id, index):
             if (currentLabel is not None):
                 print("Database error: multiple labels by same user for image, using last one")
             currentLabel = label
+            # Update form so that it has the previously saved results
+            form.length.default = currentLabel.measurement
+            form.sideChosen.default = currentLabel.side_user_clicked
+            form.process()
         labeledImageIds.add(label.image_id)
 
     return render_template('image-selection.html',  putCorrectLeft=bool(image.side_with_lesion == constants.LEFT),
@@ -123,7 +129,8 @@ def label_path(batch_id, index):
                                                     currentLabel=currentLabel,
                                                     images=images,
                                                     labeledImageIds=labeledImageIds,
-                                                    batch_id=batch_id)
+                                                    batch_id=batch_id,
+                                                    form=form)
 
 # wl and ww should be between 0-100
 @app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png", methods=['GET'])
