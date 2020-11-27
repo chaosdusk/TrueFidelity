@@ -69,6 +69,17 @@ imageB.addEventListener("mousedown", function() {
     document.getElementById('sideChosen-' + imageB.getAttribute('value')).checked = true;
 });
 
+document.getElementById('sideChosen').addEventListener("change", function() {
+    // Should we select imageA? (ie: is imageA's position equal to the checked position?)
+    if ((imageA.getAttribute('value') == 0) == document.getElementById('sideChosen-0').checked) {
+        imageA.nextElementSibling.classList.add("selected");
+        imageB.nextElementSibling.classList.remove("selected");
+    } else {
+        imageB.nextElementSibling.classList.add("selected");
+        imageA.nextElementSibling.classList.remove("selected");
+    }
+})
+
 // Range change values
 function helloWorld(val) {
     console.log(val);
