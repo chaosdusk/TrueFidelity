@@ -34,6 +34,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     flex-basis: 1100px;
+    padding: 5px;
 }
 
 .sidebar-container {
@@ -66,7 +67,7 @@
 
 .selected-indicator {
     height: 25px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 
@@ -131,4 +132,8 @@ img, div {
     justify-content: space-evenly;
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.navbar {
+    margin-bottom: 5px;
 }
