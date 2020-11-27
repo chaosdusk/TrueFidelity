@@ -46,7 +46,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     batch_id = db.Column(db.Integer, db.ForeignKey('batch.id'))
-    dose_reduction = db.Column(db.Integer)
+    dose_reduction = db.Column(db.String(64))
     hu = db.Column(db.Integer)
     reconstruction = db.Column(db.String(128))
     lesion_size_mm = db.Column(db.Float)
