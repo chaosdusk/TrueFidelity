@@ -25,6 +25,7 @@
     flex-grow: 1;
     justify-content: center;
     padding: 50px;
+    overflow-y: auto;
 }
 
 .question-container {
@@ -79,7 +80,10 @@
 .navigation-container {
     background-color: white;
     display: flex;
-    justify-content: space-between;
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Prevent weird ghost image form canavas page */
@@ -109,10 +113,15 @@ img, div {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 5px;
+}
+
+#choice-form > div {
+    margin: 2px;
 }
 
 .spacer {
-    flex-grow: 1;
+    flex-grow: 5;
     flex-basis: 0;
 }
 
@@ -120,6 +129,6 @@ img, div {
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     padding-left: 15px;
 }

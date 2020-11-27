@@ -26,7 +26,6 @@
                     min="0" max="100" value="50" step="1" oninput="updateWL(this.value, 'imageAimage')">
               <label for="imageAwl">WL</label>
             </div> -->
-            Left or right {{ imageASide }}
             <!-- TODO! Write a script that chagnes opacity / visibility for both only after both hvae loaded (since this first one always loads first) -->
           </div>
         </div>
@@ -51,6 +50,9 @@
 
         <div class="choice-container">
           <div class="inner-choice-container" style="display: flex; justify-content: space-evenly;">
+            <div class="navigation-container">
+              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1)}}">Back</a>
+            </div>
             <div class="spacer"></div>
             <div class="spacer">
               <form id="choice-form" action="" method="post">
@@ -74,7 +76,7 @@
                 <input type="number" id="length" name="length" {% if currentLabel %} value={{currentLabel.measurement}} {% endif %}> -->
               </form>
             </div>
-          <div class="spacer">
+            <div class="spacer">
               <div class="adjustment-container">
                 <div class="range-input">
                   <input type="range" id="wwRange" name="ww"
@@ -88,13 +90,15 @@
                 </div>
               </div>
             </div>
+            <div class="navigation-container">
+              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1)}}">Next</a>
+            </div>
           </div>
 
-          <div class="navigation-container">
+          <!-- <div class="navigation-container">
             <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1)}}">Back</a>
             <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1)}}">Next</a>
-          </div>
-          </div>
+          </div> -->
         </div>
 
       </div>
