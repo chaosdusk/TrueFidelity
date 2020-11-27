@@ -42,7 +42,3 @@ class LabelForm(FieldsRequiredForm):
     sideChosen = RadioField('Side with lesion', choices=[(0, "left"), (1, "right")])
     submit = SubmitField('Save')
 
-    def validate_length(self, length):
-        if length < 0 or length > 200:
-            raise ValidationError('Length is not valid')
-

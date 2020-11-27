@@ -99,6 +99,7 @@ def label_path(batch_id, index):
 
     # if index out of bounds, redirect to 0
     images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
+    # Note that index cannot be negative since it will not match as an int. Would have to handle negatives by myself
     if (index >= len(images) or index < 0):
         if (index == 0):
             # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
@@ -108,6 +109,20 @@ def label_path(batch_id, index):
 
     # Get image of this index
     image = images[index]
+
+    if form.validate_on_submit():
+        label = Label.query.filter_by(user_id=current_user.id).filter_by(image_id=image.id).first()
+        print("Previous label: ", label)
+        if (label is None):
+            print("Creating new label")
+            label = Label(user_id=current_user.id, image_id=image.id)
+        label.side_user_clicked = form.sideChosen.data
+        label.measurement = form.length.data
+        db.session.add(label)
+        db.session.commit()
+        print("new label:", label)
+        flash(f'Saved label for image {image.id} successfully')
+        return redirect(url_for('label_path', batch_id=batch_id, index=index))
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).join(Image).filter_by(batch_id=batch_id).all()
     currentLabel = None

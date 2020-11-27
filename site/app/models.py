@@ -41,7 +41,7 @@ class Label(db.Model):
     measurement = db.Column(db.Integer) # Chose Integer > Float or Numeric since no need for decimals
 
     def __repr__(self):
-        return '<Label {}>'.format(self.timestamp)
+        return '<Label {}, user {}, image {}, side {}, measurement {}>'.format(self.timestamp, self.user_id, self.image_id, self.side_user_clicked, self.measurement)
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
