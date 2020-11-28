@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/label-home.css') }}">
+{% endblock %}
+
+{% block body %}
+
+{% for batch_tuple in batches %}
+{% set batch = batch_tuple[0] %}
+{% set batch_count = batch_tuple[1] %}
+<div class="batch-container">
+    <h2>
+        {{ batch.name }}
+    </h2>
+    <p>
+        {{ batch.description }}
+    </p>
+    {% with current_batch_labels = labeled_dict[batch.id] or dict() %}
+    {% for _ in range(instances) %}
+    {% with num_labeled = current_batch_labels[loop.index] or 0 %}
+    <div class="instance-container">
+        <h3>instance: {{ loop.index }}</h3>
+        <p>{{ num_labeled }} / {{ batch_count }}</p>
+        <a href={{url_for('label_path', batch_id=batch.id, index=0, instance=loop.index)}}>Link to the instance</a>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    {% endwith %}
+</div>
+<hr>
+
+
+{% endfor %}
+{% endblock %}

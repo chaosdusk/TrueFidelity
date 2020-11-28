@@ -22,6 +22,8 @@ from app.forms import LoginForm, RegistrationForm, LabelForm
 
 from werkzeug.urls import url_parse
 
+from sqlalchemy import func
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,17 +67,7 @@ def logout():
 @app.route('/', methods=['GET'])
 @login_required
 def index():
-    labels = [
-        {
-            'labeler': {'username': 'Yeet'},
-            'timestamp': '4:20'
-        },
-        {
-            'labeler': {'username': 'Yeet2'},
-            'timestamp': '4:22'
-        }
-    ]
-    return render_template('index.html', labels=labels)
+    return render_template('index.html')
 
 @app.route('/database', methods=['GET'])
 def display_tables():
@@ -88,14 +80,55 @@ def display_tables():
 
 # TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
 @app.route('/label', methods=['GET'])
+@login_required
 def label_home():
-    return "label home"
+
+    # images = Image.query.all()
+    # batches = Batch.query.order_by(Batch.timestamp.asc()).all()
+    # for batch in batches:
+    #     batch_data = {}
+    #     batch_data['batch'] = batch
+    #     batch_data['total'] = len(Image.query.filter_by(batch_id=batch.id).all())
+    #     instance_counts = [0] * constants.NUM_INSTANCES
+
+    # totalImages = db.session.query(Batch, Image).outerjoin(Image).with_entities(Batch.id, func.count(Image.id)).group_by(Batch.id).all()
+
+    # Notice that sum will be 0 so handle taht case
+    # [(batch1, 3), (batch2, 0)]
+    batches = db.session.query(Batch, Image).outerjoin(Image).\
+                                    with_entities(Batch, func.count(Image.id)).\
+                                    group_by(Batch).\
+                                    order_by(Batch.id.asc()).all()
 
 
+    # [(batch_id, instance, num labeled), (etc.)]
+    labeled = Label.query.filter_by(user_id=current_user.id).\
+                        join(Image).\
+                        with_entities(Image.batch_id, Label.instance, func.count(Image.batch_id)).\
+                        group_by(Image.batch_id, Label.instance).all()
+
+    labeled_dict = {}
+    # (batch_id, instance, num labeled)
+    for labels in labeled:
+        batch_id = labels[0]
+        instance = labels[1]
+        num_labeled = labels[2]
+
+        if batch_id not in labeled_dict:
+            labeled_dict[batch_id] = {}
+        labeled_dict[batch_id][instance] = num_labeled
+
+    print("batches", batches)
+    print("labeled", labeled)
+    print("NUM labeled_dict", labeled_dict)
+    return render_template('label_home.html', batches=batches, labeled_dict=labeled_dict, instances=constants.NUM_INSTANCES)
+
+
+# Instance is 1-indexed, index is 0-indexed
 @app.route('/label/<int:batch_id>/<int:instance>/<int:index>', methods=['GET', 'POST'])
 @login_required
 def label_path(batch_id, instance, index):
-    if (instance >= constants.NUM_INSTANCES):
+    if (instance > constants.NUM_INSTANCES or instance == 0):
         return redirect(url_for('label_home'))
 
     # if index out of bounds, redirect to 0

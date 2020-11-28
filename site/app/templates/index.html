@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/image-selection.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 {% endblock %}
 
 {% block body %}
-Hello there!
-<h1>Hi, {{ current_user.username }}!</h1>
-{% for label in labels %}
-<div><p>{{ label.labeler.username }} labeled at {{ label.timestamp }}</p></div>
-{% endfor %}
+<div class="container">
+<div class="welcome-container">
+    <h1>Hi, {{ current_user.username }}!</h1>
+</div>
+<div class="index-buttons">
+    {% if current_user.status == 1 or current_user.is_admin %}
+    <a class="index-button" href="{{ url_for('label_home') }}">Code</a>
+    {% else %}
+    <p>
+        This account has not been activated. Email the administrator to get activated.
+    </p>
+    {% endif %}
+    {% if current_user.is_admin %}
+    <a class="index-button" href="{{ url_for('display_tables') }}">Database</a>
+    {% endif %}
+</div>
+
+</div>
+
 {% endblock %}

@@ -1,0 +1,13 @@
+.index-button {
+    border: 1px outset blue;
+    background-color: lightBlue;
+    height:100px;
+    width:100px;
+    cursor:pointer;
+    display: inline-block;
+}
+
+.index-button:hover {
+   background-color: blue;
+    color:white;
+}
