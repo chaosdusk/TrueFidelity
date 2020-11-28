@@ -137,7 +137,8 @@ def label_path(batch_id, instance, index):
     if (index >= len(images) or index < 0):
         if (index == 0):
             # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
-            return "Batch is empty"
+            flash(f'Batch {batch_id} is empty', 'Warning')
+            return redirect(url_for('label_home'))
         else:
             return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=0))
 
