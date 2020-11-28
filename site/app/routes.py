@@ -15,6 +15,7 @@ from io import BytesIO
 from flask import render_template, flash, redirect, make_response, url_for, request
 
 from flask_login import current_user, login_user, logout_user, login_required
+from app.decorators import admin_required, active_required
 from app.models import User, Label, Image, Batch
 
 from app import app, db
@@ -70,6 +71,8 @@ def index():
     return render_template('index.html')
 
 @app.route('/database', methods=['GET'])
+@login_required
+@admin_required
 def display_tables():
     users = User.query.all()
     labels = Label.query.all()
@@ -81,6 +84,7 @@ def display_tables():
 # TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
 @app.route('/label', methods=['GET'])
 @login_required
+@active_required
 def label_home():
 
     # images = Image.query.all()
@@ -127,6 +131,7 @@ def label_home():
 # Instance is 1-indexed, index is 0-indexed
 @app.route('/label/<int:batch_id>/<int:instance>/<int:index>', methods=['GET', 'POST'])
 @login_required
+@active_required
 def label_path(batch_id, instance, index):
     if (instance > constants.NUM_INSTANCES or instance == 0):
         return redirect(url_for('label_home'))
