@@ -14,7 +14,7 @@ from io import BytesIO
 
 from flask import render_template, flash, redirect, make_response, url_for, request
 
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required, fresh_login_required
 from app.decorators import admin_required, active_required
 from app.models import User, Label, Image, Batch
 
@@ -71,7 +71,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/database', methods=['GET'])
-@login_required
+@fresh_login_required
 @admin_required
 def display_tables():
     users = User.query.all()
