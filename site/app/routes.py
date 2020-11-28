@@ -19,7 +19,7 @@ from app.decorators import admin_required, active_required
 from app.models import User, Label, Image, Batch
 
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, LabelForm
+from app.forms import LoginForm, RegistrationForm, LabelForm, EmptyForm
 
 from werkzeug.urls import url_parse
 
@@ -74,12 +74,84 @@ def index():
 @fresh_login_required
 @admin_required
 def display_tables():
+    form = EmptyForm()
     users = User.query.all()
     labels = Label.query.all()
     images = Image.query.all()
     batches = Batch.query.all()
-    print(batches)
-    return render_template('tables.html', users=users, labels=labels, images=images, batches=batches)
+    return render_template('tables.html', users=users, labels=labels, images=images, batches=batches, form=form, INACTIVE=constants.INACTIVE)
+
+@app.route('/database/activate/<username>', methods=['POST'])
+@login_required
+@admin_required
+def activate_status(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), "error")
+            return redirect(url_for('display_tables'))
+        user.status = constants.ACTIVE
+        db.session.commit()
+        flash('User {} has been activated!'.format(username), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
+@app.route('/database/deactivate/<username>', methods=['POST'])
+@login_required
+@admin_required
+def deactivate_status(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), "error")
+            return redirect(url_for('display_tables'))
+        user.status = constants.INACTIVE
+        db.session.commit()
+        flash('User {} has been deactivated!'.format(username), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
+@app.route('/database/activate-admin/<username>', methods=['POST'])
+@login_required
+@admin_required
+def deactivate_admin(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), "error")
+            return redirect(url_for('display_tables'))
+        if user == current_user:
+            flash('You cannot remove admin from yourself!', "error")
+            return redirect(url_for('display_tables'))
+        user.is_admin = False
+        db.session.commit()
+        flash('Removed admin from {}!'.format(username), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
+@app.route('/database/deactivate-admin/<username>', methods=['POST'])
+@login_required
+@admin_required
+def activate_admin(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), "error")
+            return redirect(url_for('display_tables'))
+        user.is_admin = True
+        db.session.commit()
+        flash('Gave admin permissions to {}!'.format(username), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
 
 # TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
 @app.route('/label', methods=['GET'])

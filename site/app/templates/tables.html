@@ -20,6 +20,12 @@ Users
         {% for key in userkeys %}
         <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
         {% endfor %}
+        <TD>
+            Change Admin
+        </TD>
+        <TD>
+            Change status
+        </TD>
     </TR>
     {% endif %}
 
@@ -27,7 +33,33 @@ Users
         {% for key in userkeys %}
         <TD class={{'c' ~ loop.index}}>{{ user[key] }}</TD>
         {% endfor %}
+        <TD>
+            {% if user.is_admin %}
+            <form action="{{ url_for('deactivate_admin', username=user.username) }}" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.submit(value='deactivate') }}
+            </form>
+            {% else %}
+            <form action="{{ url_for('activate_admin', username=user.username) }}" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.submit(value='activate') }}
+            </form>
+            {% endif %}
+        <TD>
+            {% if user.status == INACTIVE %}
+            <form action="{{ url_for('activate_status', username=user.username) }}" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.submit(value='activate') }}
+            </form>
+            {% else %}
+            <form action="{{ url_for('deactivate_status', username=user.username) }}" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.submit(value='deactivate') }}
+            </form>
+            {% endif %}
+        </TD>
     </TR>
+
     {% endfor %}
 </table>
 <hr>

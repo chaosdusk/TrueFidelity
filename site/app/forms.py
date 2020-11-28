@@ -42,3 +42,6 @@ class LabelForm(FieldsRequiredForm):
     sideChosen = RadioField('Select side with lesion', choices=[(0, "left"), (1, "right")])
     submit = SubmitField('Save')
 
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')
+
