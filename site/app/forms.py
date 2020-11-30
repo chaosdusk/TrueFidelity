@@ -39,7 +39,7 @@ class FieldsRequiredForm(FlaskForm):
 
 class LabelForm(FieldsRequiredForm):
     length = IntegerField('Length')
-    sideChosen = RadioField('Select side with lesion', choices=[(0, "left"), (1, "right")])
+    sideChosen = RadioField('Select side with lesion', choices=[(0, "left"), (1, "right")], coerce=int)
     submit = SubmitField('Save')
 
 class EmptyForm(FlaskForm):
