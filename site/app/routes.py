@@ -276,7 +276,7 @@ def imagedata_false(image_id, wl, ww):
 
     image_filepath = image.getFakeFilePath()
     print("FILEPATH:", image_filepath)
-    with app.open_resource(f'static\\{image_filepath}') as f:
+    with app.open_resource(f'static/{image_filepath}') as f:
         fig_handle = pl.load(f)
         vcenter = wl * 255 / 100
         vmin = int(vcenter - ww * 255 / 100 / 2)
@@ -304,7 +304,7 @@ def imagedata_true(image_id, wl, ww):
 
     image_filepath = image.getFilePath()
     print("FILEPATH:", image_filepath)
-    with app.open_resource(f'static\\{image_filepath}') as f:
+    with app.open_resource(f'static/{image_filepath}') as f:
         fig_handle = pl.load(f)
         vcenter = wl * 255 / 100
         vmin = int(vcenter - ww * 255 / 100 / 2)
