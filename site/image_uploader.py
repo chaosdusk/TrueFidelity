@@ -30,6 +30,37 @@ def upload_all(folder, batch_id):
     for f in files:
         __upload_helper(f, batch_id)
 
+    # Upload fake files
+    fake_folder = os.path.join(folder, 'fake')
+    fake_files = [os.path.join(fake_folder, f) for f in os.listdir(fake_folder) if os.path.isfile(os.path.join(fake_folder, f))]
+    for f in fake_files:
+        __upload_fake_helper(f, batch_id)
+
+def upload_fake(image_file, batch_id):
+    b = Batch.query.get(batch_id)
+    if b is None:
+        raise Exception(f"Batch_id '{batch_id}'' does not exist! Create this batch first or select a different one")
+    __upload_fake_helper(image_file, batch_id)
+
+def __upload_fake_helper(image_file, batch_id):
+    folder_dest_fake = os.path.join(app.root_path, 'static', 'images', str(batch_id), 'fake')
+    if not os.path.exists(folder_dest_fake):
+        print("Making new folders:", folder_dest_fake)
+        os.makedirs(folder_dest_fake)
+
+    base = os.path.basename(image_file)
+    attributes = os.path.splitext(base)[0].split(";")
+
+    splitName = attributes[0].split("_")
+    reconstruction = splitName[0] + "_" + splitName[1]
+    dose = splitName[2]
+
+    save_name = f'{reconstruction}_{dose}.pickle'
+    dest_file = os.path.join(folder_dest_fake, save_name)
+    copyfile(image_file, dest_file)
+
+    print("Uploaded fake: ", save_name)
+
 def upload(image_file, batch_id):
     b = Batch.query.get(batch_id)
     if b is None:
@@ -44,12 +75,9 @@ def __upload_helper(image_file, batch_id):
         os.makedirs(folder_dest_fake)
 
     base = os.path.basename(image_file)
-
-    # TODO: if imageOf noise, then don't add to database, but save to correct location
     dest_file = os.path.join(folder_dest, base)
     copyfile(image_file, dest_file)
 
-    # TODO: See above, this is strictly for actual images to go into database
     attributes = os.path.splitext(base)[0].split(";")
 
     splitName = attributes[0].split("_")
@@ -85,4 +113,4 @@ def create_batch(batch_name, batch_description):
     print(f"Created batch: {b.id}, {b.name}")
 
 if __name__ == "__main__":
-    upload('..\images\TF_LOW_30RED_8221;-10;lesion;9.5;0.pickle', 1)
+    print('Call upload_all with folder of images to upload. Folder should contain a folder called "fake"')
