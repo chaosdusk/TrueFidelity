@@ -28,7 +28,7 @@ def noise_mod(image, index):
         offset_y = -50
     return (noise[0]+offset_y, noise[1]+offset_x)
 
-def generate(image_index, image_full_path, lesion_index):
+def generate(image_index, image_full_path, lesion_index, is_noise=False):
     img = pydicom.read_file(image_full_path)
 
     # process image
@@ -48,15 +48,15 @@ def generate(image_index, image_full_path, lesion_index):
             if random.randint(0, 1) == 1:
                 np.flip(cut_noise)
             noise[i:i+radius*2, j:j+radius*2] = cut_noise
-
-    # select random grid to replace with the lesion cut
-    lesion_x = random.randint(0, grid_dim - 1)
-    lesion_y = random.randint(0, grid_dim - 1)
-    lesion_selected = location_mod(image_index, lesion_index)
-    lesion = scaled[lesion_selected[0]-radius:lesion_selected[0]+radius, lesion_selected[1]-radius:lesion_selected[1]+radius]
-    noise[lesion_y*radius*2:lesion_y*radius*2+radius*2, lesion_x*radius*2:lesion_x*radius*2+radius*2] = lesion
-    #plt.imshow(noise, cmap='gray', vmin=0, vmax=255)
-    #plt.show()
+    if not is_noise:
+        # select random grid to replace with the lesion cut
+        lesion_x = random.randint(0, grid_dim - 1)
+        lesion_y = random.randint(0, grid_dim - 1)
+        lesion_selected = location_mod(image_index, lesion_index)
+        lesion = scaled[lesion_selected[0]-radius:lesion_selected[0]+radius, lesion_selected[1]-radius:lesion_selected[1]+radius]
+        noise[lesion_y*radius*2:lesion_y*radius*2+radius*2, lesion_x*radius*2:lesion_x*radius*2+radius*2] = lesion
+        #plt.imshow(noise, cmap='gray', vmin=0, vmax=255)
+        #plt.show()
 
     hu = -15
     if lesion_index > 4:
@@ -67,10 +67,11 @@ def generate(image_index, image_full_path, lesion_index):
     size = lesion_sizes[lesion_index % 5]
 
     image_number = 0
+    save_file = './images/{};{};{};{};{}.pickle'.format(directories[image_index][8:], hu, 'lesion', size, image_number) if not is_noise else './noise/{};{}.pickle'.format(directories[image_index][8:], 'noise')
 
     if not os.path.exists('images'):
         os.makedirs('images')
-    with open('./images/{};{};{};{};{}.pickle'.format(directories[image_index][8:], hu, 'lesion', size, image_number), 'wb') as handle:
+    with open(save_file, 'wb') as handle:
         pickle.dump(noise, handle)
 
 
@@ -86,8 +87,8 @@ offset = 20
 # get random image to pull lesion and noise from
 directories = [x[0] for x in os.walk('./DICOM/')]
 for image_index in range(1, len(directories)):
-    for lesion_index in range(0, 15):
+    for lesion_index in range(0, 1):
         image_path = directories[image_index]
         (_, _, image_file) = next(os.walk(image_path))
         image_full_path = '{}/{}'.format(image_path, image_file[0])
-        generate(image_index, image_full_path, lesion_index)
+        generate(image_index, image_full_path, lesion_index, True)
