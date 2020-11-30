@@ -17,7 +17,7 @@ Users
     {% set userkeys = user.__table__.columns._data.keys() %}
     {{ userkeys }}
     <TR>
-        {% for key in userkeys %}
+        {% for key in userkeys if key != "password_hash" %}
         <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
         {% endfor %}
         <TD>
@@ -30,7 +30,7 @@ Users
     {% endif %}
 
     <TR>
-        {% for key in userkeys %}
+        {% for key in userkeys if key != "password_hash" %}
         <TD class={{'c' ~ loop.index}}>{{ user[key] }}</TD>
         {% endfor %}
         <TD>
