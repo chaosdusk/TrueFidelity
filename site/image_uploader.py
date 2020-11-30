@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle as pl
+import random
 
 import os
 from shutil import copyfile
@@ -18,13 +19,14 @@ def main():
     plt.imshow(fig_handle, cmap='gray', vmin=0, vmax=255)
     plt.show()
 
-# TODO: Image upload needs to be in a random order so that index doesn't give away which is which
 def upload_all(folder, batch_id):
     b = Batch.query.get(batch_id)
     if b is None:
         raise Exception(f"Batch_id '{batch_id}'' does not exist! Create this batch first or select a different one")
 
     files = [os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    # Shuffle the files so the order of the images in the questions is random
+    random.shuffle(files)
     for f in files:
         __upload_helper(f, batch_id)
 
