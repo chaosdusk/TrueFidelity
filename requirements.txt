@@ -1,113 +1,67 @@
 alembic==1.4.3
-argon2-cffi @ file:///D:/bld/argon2-cffi_1596630042503/work
-async-generator==1.10
-attrs @ file:///home/conda/feedstock_root/build_artifacts/attrs_1599308529326/work
-backcall @ file:///home/conda/feedstock_root/build_artifacts/backcall_1592338393461/work
-backports.functools-lru-cache==1.6.1
-bleach @ file:///home/conda/feedstock_root/build_artifacts/bleach_1600454382015/work
-brotlipy==0.7.0
-certifi==2020.6.20
-cffi @ file:///D:/bld/cffi_1600276628150/work
-chardet @ file:///D:/bld/chardet_1600358690877/work
+appdirs==1.4.4
+Babel==2.9.0
+blinker==1.4
+CacheControl==0.12.6
+certifi==2020.11.8
+chardet==3.0.4
 click==7.1.2
-cloudpickle @ file:///tmp/build/80754af9/cloudpickle_1598884132938/work
-colorama==0.4.3
-cryptography @ file:///D:/bld/cryptography_1600960404355/work
+colorama==0.4.4
+contextlib2==0.6.0.post1
 cycler==0.10.0
-cytoolz==0.11.0
-dask @ file:///tmp/build/80754af9/dask-core_1602083700509/work
-decorator==4.4.2
-defusedxml==0.6.0
+distlib==0.3.1
+distro==1.5.0
 dnspython==2.0.0
+dominate==2.6.0
+elasticsearch==7.10.0
 email-validator==1.1.2
-entrypoints==0.3
 Flask==1.1.2
+Flask-Babel==2.0.0
+Flask-Bootstrap==3.3.7.1
+Flask-HTTPAuth==4.2.0
 Flask-Login==0.5.0
+Flask-Mail==0.9.1
 Flask-Migrate==2.5.3
+Flask-Moment==0.10.0
 Flask-SQLAlchemy==2.4.4
 Flask-WTF==0.14.3
-idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1593328102638/work
-imageio @ file:///tmp/build/80754af9/imageio_1594161405741/work
-importlib-metadata @ file:///D:/bld/importlib-metadata_1600910662556/work
-ipykernel @ file:///D:/bld/ipykernel_1595447084845/work/dist/ipykernel-5.3.4-py3-none-any.whl
-ipython @ file:///D:/bld/ipython_1598750147809/work
-ipython-genutils==0.2.0
+guess-language-spirit==0.5.3
+gunicorn==20.0.4
+html5lib==1.1
+idna==2.10
+ipaddr==2.2.0
 itsdangerous==1.1.0
-jedi @ file:///D:/bld/jedi_1595018491768/work
 Jinja2==2.11.2
-joblib==0.17.0
-json5 @ file:///home/conda/feedstock_root/build_artifacts/json5_1600692310011/work
-jsonschema==3.2.0
-jupyter-client @ file:///home/conda/feedstock_root/build_artifacts/jupyter_client_1598486169312/work
-jupyter-core==4.6.3
-jupyterlab==2.2.8
-jupyterlab-pygments @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_pygments_1601375948261/work
-jupyterlab-server @ file:///home/conda/feedstock_root/build_artifacts/jupyterlab_server_1593951277307/work
-kaggle==1.5.8
-kiwisolver==1.2.0
+kiwisolver==1.3.1
+lockfile==0.12.2
 Mako==1.1.3
-MarkupSafe @ file:///D:/bld/markupsafe_1600368513338/work
-matplotlib @ file:///C:/ci/matplotlib-base_1597876438601/work
-mistune==0.8.4
-mkl-fft==1.2.0
-mkl-random==1.1.1
-mkl-service==2.3.0
-nbclient @ file:///home/conda/feedstock_root/build_artifacts/nbclient_1598558657104/work
-nbconvert @ file:///D:/bld/nbconvert_1601713399722/work
-nbformat @ file:///home/conda/feedstock_root/build_artifacts/nbformat_1594060262917/work
-nest-asyncio @ file:///home/conda/feedstock_root/build_artifacts/nest-asyncio_1601342677072/work
-networkx @ file:///tmp/build/80754af9/networkx_1598376031484/work
-notebook @ file:///D:/bld/notebook_1599742602312/work
-numpy==1.19.2
-olefile==0.46
-packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1589925210001/work
-pandocfilters==1.4.2
-parso @ file:///home/conda/feedstock_root/build_artifacts/parso_1595548966091/work
-pickleshare==0.7.5
-Pillow @ file:///C:/ci/pillow_1594298230227/work
-plotly @ file:///tmp/build/80754af9/plotly_1601587622649/work
-prometheus-client @ file:///home/conda/feedstock_root/build_artifacts/prometheus_client_1590412252446/work
-prompt-toolkit @ file:///home/conda/feedstock_root/build_artifacts/prompt-toolkit_1598885455507/work
-psycopg2==2.8.6
-pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1593275161868/work
-pydicom==2.0.0
-Pygments @ file:///home/conda/feedstock_root/build_artifacts/pygments_1600347314331/work
-pyOpenSSL==19.1.0
+MarkupSafe==1.1.1
+matplotlib==3.3.3
+msgpack==1.0.0
+numpy==1.19.4
+packaging==20.7
+pep517==0.9.1
+Pillow==8.0.1
+pkg-resources==0.0.0
+progress==1.5
+pydicom==2.1.1
+PyJWT==1.7.1
+PyMySQL==0.10.1
 pyparsing==2.4.7
-pyrsistent @ file:///D:/bld/pyrsistent_1599988476846/work
-PySocks==1.7.1
 python-dateutil==2.8.1
 python-dotenv==0.15.0
 python-editor==1.0.4
-python-slugify==4.0.1
-PyWavelets @ file:///C:/ci/pywavelets_1601658407916/work
-pywin32==227
-pywinpty==0.5.7
-PyYAML==5.3.1
-pyzmq==19.0.2
-requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1592425495151/work
+pytoml==0.1.21
+pytz==2020.4
+redis==3.5.3
+requests==2.25.0
 retrying==1.3.3
-scikit-image==0.16.2
-scikit-learn==0.23.2
-scipy @ file:///C:/ci/scipy_1592916963468/work
-Send2Trash==1.5.0
-sip==4.19.13
+rq==1.7.0
 six==1.15.0
-slugify==0.0.1
 SQLAlchemy==1.3.20
-terminado @ file:///D:/bld/terminado_1600709990768/work
-testpath==0.4.4
-text-unidecode==1.3
-threadpoolctl==2.1.0
-toolz @ file:///tmp/build/80754af9/toolz_1601054250827/work
-tornado==6.0.4
-tqdm==4.50.2
-traitlets @ file:///home/conda/feedstock_root/build_artifacts/traitlets_1600970644261/work
-urllib3==1.24.3
-wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1600965781394/work
+toml==0.10.2
+urllib3==1.26.2
+visitor==0.1.3
 webencodings==0.5.1
 Werkzeug==1.0.1
-win-inet-pton==1.1.0
-wincertstore==0.2
 WTForms==2.3.3
-zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1601765966131/work
