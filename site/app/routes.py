@@ -12,7 +12,7 @@ from matplotlib.dates import DateFormatter
 
 from io import BytesIO
 
-from flask import render_template, flash, redirect, make_response, url_for, request
+from flask import render_template, flash, redirect, make_response, url_for, request, Response
 
 from flask_login import current_user, login_user, logout_user, login_required, fresh_login_required
 from app.decorators import admin_required, active_required
@@ -25,6 +25,8 @@ from werkzeug.urls import url_parse
 
 from sqlalchemy import func
 
+import pandas as pd
+import time
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -71,7 +73,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/database', methods=['GET'])
-@fresh_login_required
+@login_required
 @admin_required
 def display_tables():
     form = EmptyForm()
@@ -171,10 +173,13 @@ def label_home():
 
     # Notice that sum will be 0 so handle taht case
     # [(batch1, 3), (batch2, 0)]
-    batches = db.session.query(Batch, Image).outerjoin(Image).\
-                                    with_entities(Batch, func.count(Image.id)).\
-                                    group_by(Batch).\
-                                    order_by(Batch.id.asc()).all()
+    # batches = db.session.query(Batch, Image).outerjoin(Image).\
+    #                                 with_entities(Batch, func.count(Image.id)).\
+    #                                 group_by(Batch).\
+    #                                 order_by(Batch.id.asc()).all()
+    batches = Batch.query.outerjoin(Image).with_entities(Batch, func.count(Image.id)).\
+                            group_by(Batch).\
+                            order_by(Batch.id.asc()).all()
 
 
     # [(batch_id, instance, num labeled), (etc.)]
@@ -236,7 +241,7 @@ def label_path(batch_id, instance, index):
         db.session.commit()
         print("new label:", label)
         flash(f'Saved label for image {image.id} successfully', 'success')
-        return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index))
+        return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index + 1))
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
     currentLabel = None
@@ -270,7 +275,6 @@ def imagedata_false(image_id, wl, ww):
     if (image is None):
         return "Invalid image id"
 
-
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
 
@@ -283,6 +287,8 @@ def imagedata_false(image_id, wl, ww):
         vmax = int(vcenter + ww * 255 / 100 / 2)
         print(vmin, vmax)
         ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+        ax.axis('off')
+        fig.tight_layout(pad=0)
 
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
@@ -298,7 +304,6 @@ def imagedata_true(image_id, wl, ww):
     if (image is None):
         return "Invalid image id"
 
-
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
 
@@ -311,6 +316,8 @@ def imagedata_true(image_id, wl, ww):
         vmax = int(vcenter + ww * 255 / 100 / 2)
         print(vmin, vmax)
         ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+        ax.axis('off')
+        fig.tight_layout(pad=0)
 
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
@@ -318,6 +325,55 @@ def imagedata_true(image_id, wl, ww):
     response=make_response(png_output.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
+
+@app.route("/download/<int:batch_id>", methods=['GET'])
+@login_required
+@active_required
+def download_own_results(batch_id):
+    # Just this current user
+    df = pd.read_sql(db.session.query(Batch, Image, Label, Label.timestamp.label("label_timestamp"), User.username, User.email).\
+                                    filter_by(id=batch_id).\
+                                    outerjoin(Image, Image.batch_id == Batch.id).\
+                                    outerjoin(Label, Label.image_id == Image.id).\
+                                    filter_by(user_id=current_user.id).\
+                                    join(User, Label.user_id == User.id).statement,
+                    db.session.bind)
+
+    df = df[["username", "email",
+            "batch_id", "name", "instance",
+            "image_id", "dose", "hu", "reconstruction", "lesion_size_mm", "size_measurement", "side_with_lesion",
+            "side_user_clicked", "measurement", "label_timestamp"]]
+    csv = df.to_csv(index=False)
+    timestr = time.strftime("%Y%m%d-%H%M")
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 f"attachment; filename={current_user.username}_labels_{batch_id}_{timestr}.csv"})
+
+@app.route('/download/all/<int:batch_id>', methods=['GET'])
+@login_required
+@admin_required
+def download_all_results(batch_id):
+    # If admin, download all
+    df = pd.read_sql(db.session.query(Batch, Image, Label, Label.timestamp.label("label_timestamp"), User.username, User.email).\
+                                    filter_by(id=batch_id).\
+                                    outerjoin(Image, Image.batch_id == Batch.id).\
+                                    outerjoin(Label, Label.image_id == Image.id).\
+                                    join(User, Label.user_id == User.id).statement,
+                db.session.bind)
+
+    df = df[["username", "email",
+            "batch_id", "name", "instance",
+            "image_id", "dose", "hu", "reconstruction", "lesion_size_mm", "size_measurement", "side_with_lesion",
+            "side_user_clicked", "measurement", "label_timestamp"]]
+    csv = df.to_csv(index=False)
+    timestr = time.strftime("%Y%m%d-%H%M")
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 f"attachment; filename=allusers_labels_{batch_id}_{timestr}.csv"})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

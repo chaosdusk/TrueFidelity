@@ -64,6 +64,36 @@ Users
 </table>
 <hr>
 
+Batch
+<table>
+    {% if batches|length > 0 %}
+    {% set batchkeys = batches[0].__table__.columns._data.keys() %}
+    {% endif %}
+    {% for batch in batches %}
+    {% if loop.first %}
+    {{ batchkeys }}
+    <TR>
+        {% for key in batchkeys %}
+        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
+        {% endfor %}
+        <TD>
+            Download Labels
+        </TD>
+    </TR>
+    {% endif %}
+
+    <TR>
+        {% for key in batchkeys %}
+        <TD class={{'c' ~ loop.index}}>{{ batch[key] }}</TD>
+        {% endfor %}
+        <TD>
+            <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download {{ batch.id }}</a>
+        </TD>
+    </TR>
+    {% endfor %}
+</table>
+<hr>
+
 Labels
 <table>
     {% if labels|length > 0 %}
@@ -113,26 +143,4 @@ Image
 </table>
 <hr>
 
-Batch
-<table>
-    {% if batches|length > 0 %}
-    {% set batchkeys = batches[0].__table__.columns._data.keys() %}
-    {% endif %}
-    {% for batch in batches %}
-    {% if loop.first %}
-    {{ batchkeys }}
-    <TR>
-        {% for key in batchkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
-        {% endfor %}
-    </TR>
-    {% endif %}
-
-    <TR>
-        {% for key in batchkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ batch[key] }}</TD>
-        {% endfor %}
-    </TR>
-    {% endfor %}
-</table>
 {% endblock %}
