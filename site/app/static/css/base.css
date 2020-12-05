@@ -9,6 +9,9 @@ body {
     position: absolute;
     top: 3vh;
     justify-content: center;
-    z-index: 9999;
     width: 100%;
+}
+
+.alert {
+    z-index: 9999;
 }
