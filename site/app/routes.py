@@ -236,7 +236,7 @@ def label_path(batch_id, instance, index):
         db.session.commit()
         print("new label:", label)
         flash(f'Saved label for image {image.id} successfully', 'success')
-        return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index))
+        return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index + 1))
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
     currentLabel = None
