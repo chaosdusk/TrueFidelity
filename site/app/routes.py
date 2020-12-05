@@ -270,7 +270,6 @@ def imagedata_false(image_id, wl, ww):
     if (image is None):
         return "Invalid image id"
 
-
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
 
@@ -283,6 +282,8 @@ def imagedata_false(image_id, wl, ww):
         vmax = int(vcenter + ww * 255 / 100 / 2)
         print(vmin, vmax)
         ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+        ax.axis('off')
+        fig.tight_layout(pad=0)
 
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
@@ -298,7 +299,6 @@ def imagedata_true(image_id, wl, ww):
     if (image is None):
         return "Invalid image id"
 
-
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
 
@@ -311,6 +311,8 @@ def imagedata_true(image_id, wl, ww):
         vmax = int(vcenter + ww * 255 / 100 / 2)
         print(vmin, vmax)
         ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+        ax.axis('off')
+        fig.tight_layout(pad=0)
 
     canvas=FigureCanvas(fig)
     png_output = BytesIO()
