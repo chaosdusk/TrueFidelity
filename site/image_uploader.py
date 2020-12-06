@@ -30,10 +30,14 @@ def upload_all(folder, batch_id):
     for f in files:
         __upload_helper(f, batch_id)
 
-    # Upload fake files
-    fake_folder = os.path.join(folder, 'fake')
-    fake_files = [os.path.join(fake_folder, f) for f in os.listdir(fake_folder) if os.path.isfile(os.path.join(fake_folder, f))]
-    for f in fake_files:
+
+def upload_all_fake(folder, batch_id):
+    b = Batch.query.get(batch_id)
+    if b is None:
+        raise Exception(f"Batch_id '{batch_id}' does not exist! Create this batch or select a different one")
+
+    files = [os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    for f in files:
         __upload_fake_helper(f, batch_id)
 
 def upload_fake(image_file, batch_id):
@@ -89,7 +93,7 @@ def __upload_helper(image_file, batch_id):
     lesion_size_mm = attributes[3]
 
     GRID_SIZE = 300
-    size_measurement = int(int(lesion_size_mm) * 100 / GRID_SIZE)
+    size_measurement = int(float(lesion_size_mm) * 100 / GRID_SIZE)
 
     i = Image(  batch_id=batch_id,
                 reconstruction=reconstruction,
