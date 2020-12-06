@@ -107,10 +107,11 @@
         Labeled: {{ labeledImageIds|length }} / {{ images|length }}
       </p>
       <hr>
-      <div class="sidebar-links">
+      <div class="sidebar-links" id="sidebar-links">
         {% for i in images %}
         <div class="{% if loop.index0 == index %} bold-label {% endif %}">
-          <a class="{% if i.id in labeledImageIds %} green-label {% endif %} "
+          <a class="{% if i.id in labeledImageIds %} green-label {% endif %}"
+            {% if loop.index0 == index %} id="current-index" {% endif %}
             href="{{url_for('label_path', batch_id=batch_id, index=loop.index0, instance=instance)}}">
             {% if loop.index0 == index %}
             →
@@ -118,9 +119,6 @@
             Image {{loop.index0}}
           </a>
         </div>
-        {% if not loop.last %}
-        <hr>
-        {% endif %}
         {% endfor %}
       </div>
     </div>
