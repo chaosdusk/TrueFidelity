@@ -45,6 +45,10 @@
     overflow-y: auto;
 }
 
+.inner-choice-container {
+    display: flex;
+    justify-content: space-evenly;
+}
 
 .image-container {
     background-color: orange;
