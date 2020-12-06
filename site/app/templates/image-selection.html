@@ -72,8 +72,6 @@
                   {% endfor %}
                 </div>
                 <div>{{ form.submit() }}</div>
-                <!-- <label for="length">Length:</label>
-                <input type="number" id="length" name="length" {% if currentLabel %} value={{currentLabel.measurement}} {% endif %}> -->
               </form>
             </div>
             <div class="spacer">
@@ -99,18 +97,32 @@
       </div>
     </div>
     <div class="sidebar-container">
-      sidebar
-      {{ labeledImageIds }}
-      {% for i in images %}
-      <div>
-        {{ i }} and labeled? {{ 'yes' if i.id in labeledImageIds else 'no' }}
-        {% if loop.index0 == index %}
-        current one!!!!
-        {% endif %}
-        <a href="{{url_for('label_path', batch_id=batch_id, index=loop.index0, instance=instance)}}">link to {{loop.index0}}</a>
-      </div>
+      <h3>
+      Batch {{ batch_id }}: {{ batch_name }}
+      </h3>
+      <h3>
+      Instance: {{ instance }}
+      </h3>
+      <p>
+        Labeled: {{ labeledImageIds|length }} / {{ images|length }}
+      </p>
       <hr>
-      {% endfor %}
+      <div class="sidebar-links">
+        {% for i in images %}
+        <div class="{% if loop.index0 == index %} bold-label {% endif %}">
+          <a class="{% if i.id in labeledImageIds %} green-label {% endif %} "
+            href="{{url_for('label_path', batch_id=batch_id, index=loop.index0, instance=instance)}}">
+            {% if loop.index0 == index %}
+            →
+            {% endif %}
+            Image {{loop.index0}}
+          </a>
+        </div>
+        {% if not loop.last %}
+        <hr>
+        {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>

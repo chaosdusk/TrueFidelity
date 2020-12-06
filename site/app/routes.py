@@ -258,6 +258,8 @@ def label_path(batch_id, instance, index):
             form.process()
         labeledImageIds.add(label.image_id)
 
+    batch_name = Batch.query.get(batch_id).name
+
     return render_template('image-selection.html',  putCorrectLeft=bool(image.side_with_lesion == constants.LEFT),
                                                     index=index,
                                                     image=image,
@@ -265,6 +267,7 @@ def label_path(batch_id, instance, index):
                                                     images=images,
                                                     labeledImageIds=labeledImageIds,
                                                     batch_id=batch_id,
+                                                    batch_name=batch_name,
                                                     form=form,
                                                     instance=instance)
 
