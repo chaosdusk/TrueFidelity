@@ -52,7 +52,7 @@ def generate(image_index, image_full_path, lesion_index, is_noise=False):
         # select random grid to replace with the lesion cut
         lesion_x = random.randint(0, grid_dim - 1)
         lesion_y = random.randint(0, grid_dim - 1)
-        lesion_selected = location_mod(image_index, lesion_index)
+        lesion_selected = location_mod(image_index, 0)
         lesion = scaled[lesion_selected[0]-radius:lesion_selected[0]+radius, lesion_selected[1]-radius:lesion_selected[1]+radius]
         noise[lesion_y*radius*2:lesion_y*radius*2+radius*2, lesion_x*radius*2:lesion_x*radius*2+radius*2] = lesion
         #plt.imshow(noise, cmap='gray', vmin=0, vmax=255)
@@ -67,17 +67,17 @@ def generate(image_index, image_full_path, lesion_index, is_noise=False):
     size = lesion_sizes[lesion_index % 5]
 
     image_number = 0
-    save_file = './images/{};{};{};{};{}.pickle'.format(directories[image_index][8:], hu, 'lesion', size, image_number) if not is_noise else './noise/{};{}.pickle'.format(directories[image_index][8:], 'noise')
+    save_file = './images_5x5/{};{};{};{};{}.pickle'.format(directories[image_index][8:], hu, 'lesion', size, image_number) if not is_noise else './noise_5x5/{};{}.pickle'.format(directories[image_index][8:], 'noise')
 
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    if not os.path.exists('noise_5x5'):
+        os.makedirs('noise_5x5')
     with open(save_file, 'wb') as handle:
         pickle.dump(noise, handle)
 
 
 # setup
 radius = 15
-grid_dim = 20
+grid_dim = 5
 lesion_locations = [(250, 390), (230, 355), (205, 305), (190, 270), (175, 245), 
                     (300, 365), (280, 330), (255, 280), (240, 245), (225, 220),
                     (350, 340), (330, 305), (305, 255), (290, 220), (275, 195)]
