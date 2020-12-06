@@ -49,9 +49,9 @@
         </div>
 
         <div class="choice-container">
-          <div class="inner-choice-container" style="display: flex; justify-content: space-evenly;">
+          <div class="inner-choice-container">
             <div class="navigation-container">
-              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index - 1, instance=instance)}}">Back</a>
+              <a class="navigation-button {% if index == 0 %} hidden {% endif %}" href="{{url_for('label_path', batch_id=batch_id, index=index - 1, instance=instance)}}">Back</a>
             </div>
             <div class="spacer"></div>
             <div class="spacer">
@@ -91,7 +91,7 @@
               </div>
             </div>
             <div class="navigation-container">
-              <a class="navigation-button" href="{{url_for('label_path', batch_id=batch_id, index=index + 1, instance=instance)}}">Next</a>
+              <a class="navigation-button {% if index >= images|length - 1 %} hidden {% endif %}" href="{{url_for('label_path', batch_id=batch_id, index=index + 1, instance=instance)}}">Next</a>
             </div>
           </div>
         </div>

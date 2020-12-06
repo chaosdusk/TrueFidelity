@@ -22,4 +22,8 @@
         <p>{{ form.submit() }}</p>
     </form>
     <a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-log-in"></span> Register</a>
+    <p>
+        Forgot Your Password?
+        <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
+    </p>
 {% endblock %}
