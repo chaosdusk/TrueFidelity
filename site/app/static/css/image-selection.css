@@ -1,6 +1,4 @@
 .body-container {
-    background-color: yellow;
-    /* min-height: 100vh; TODO: I think from testing, shuld remove this, add flex to body and then flex-grow here */
     flex-grow: 1;
     display: flex;
     flex-direction: row;
@@ -9,9 +7,6 @@
 }
 
 .main-container {
-    background-color: orange;
-    /* min-height: 80vh; todo also remove this (see previous) need to handle resizing the plots somehow without breaking pixel size?...
-    can use percentages of the size of the square thing? (normalize to 100) */
     max-height: 100%;
     overflow-y: auto;
     display: flex;
@@ -20,29 +15,39 @@
 }
 
 .center-container {
-    background-color: pink;
     display: flex;
     flex-grow: 1;
     justify-content: center;
     overflow-y: auto;
+    align-items: center;
 }
 
 .question-container {
-    background-color: aqua;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
     flex-basis: 1100px;
     padding: 5px;
+    height: fit-content;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background-color: #222222;
 }
 
 .sidebar-container {
-    background-color: grey;
     flex-basis: 300px;
     max-width: 15vw;
     max-height: 100%;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-links {
+    max-height: 100%;
     overflow-y: auto;
+    padding-bottom: 15px;
 }
 
 .inner-choice-container {
@@ -51,15 +56,16 @@
 }
 
 .image-container {
-    background-color: orange;
     display: flex;
     flex-direction: column;
     position: relative;
 }
 
 .choice-container {
-    background-color: orangered;
+    background-color: lightgrey;
     width: 100%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .canvas-ruler {
@@ -78,11 +84,10 @@
 .selected {
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
-    background-color: yellow;
+    background-color: #00A0B0;
 }
 
 .navigation-container {
-    background-color: white;
     display: flex;
     flex-grow: 1;
     flex-basis: 0;
@@ -140,4 +145,12 @@ img, div {
 
 .navbar {
     margin-bottom: 5px;
+}
+
+.bold-label {
+    font-weight: bold;
+}
+
+.green-label {
+    color: limegreen;
 }
