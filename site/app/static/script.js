@@ -127,3 +127,9 @@ function updateWL(wl) {
     const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
     imageBimage.src = "/imagedata/" + Bmatch[1] + "/" + wl + "/" + Bmatch[3] + "/" + Bmatch[4];
 }
+
+// Scroll to the current image
+const scrollbarCurrent = document.getElementById('current-index');
+const parentDivPosition = scrollbarCurrent.parentElement.parentElement.offsetTop;
+const currentDivPosition = scrollbarCurrent.offsetTop
+document.getElementById('sidebar-links').scrollTop = currentDivPosition - parentDivPosition - 35;
