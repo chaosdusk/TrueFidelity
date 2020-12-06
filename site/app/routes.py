@@ -345,7 +345,7 @@ def download_own_results(batch_id):
 
     df = df[["username", "email",
             "batch_id", "name", "instance",
-            "image_id", "dose", "hu", "reconstruction", "lesion_size_mm", "size_measurement", "side_with_lesion",
+            "image_id", # "dose", "hu", "reconstruction", "lesion_size_mm", "size_measurement", "side_with_lesion",
             "side_user_clicked", "measurement", "label_timestamp"]]
     csv = df.to_csv(index=False)
     timestr = time.strftime("%Y%m%d-%H%M")
