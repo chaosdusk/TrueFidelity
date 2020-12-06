@@ -17,9 +17,10 @@ from flask import render_template, flash, redirect, make_response, url_for, requ
 from flask_login import current_user, login_user, logout_user, login_required, fresh_login_required
 from app.decorators import admin_required, active_required
 from app.models import User, Label, Image, Batch
+from app.email import send_password_reset_email
 
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, LabelForm, EmptyForm
+from app.forms import LoginForm, RegistrationForm, LabelForm, EmptyForm, ResetPasswordRequestForm, ResetPasswordForm
 
 from werkzeug.urls import url_parse
 
@@ -374,6 +375,35 @@ def download_all_results(batch_id):
         mimetype="text/csv",
         headers={"Content-disposition":
                  f"attachment; filename=allusers_labels_{batch_id}_{timestr}.csv"})
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('Check your email for the instructions to reset your password', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_password_request.html',
+                           title='Reset Password', form=form)
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('index'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
