@@ -92,7 +92,7 @@ def __upload_helper(image_file, batch_id):
     imageOf = attributes[2]
     lesion_size_mm = attributes[3]
 
-    GRID_SIZE = 300
+    GRID_SIZE = 15 * 5
     size_measurement = int(float(lesion_size_mm) * 100 / GRID_SIZE)
 
     i = Image(  batch_id=batch_id,
