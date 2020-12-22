@@ -42,6 +42,7 @@
     margin-left: 15px;
     display: flex;
     flex-direction: column;
+    color: darkgray;
 }
 
 .sidebar-links {
@@ -62,7 +63,7 @@
 }
 
 .choice-container {
-    background-color: lightgrey;
+    background-color: darkgrey;
     width: 100%;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -93,6 +94,11 @@
     flex-basis: 0;
     justify-content: center;
     align-items: center;
+}
+
+.navigation-container a {
+    color: white;
+    font-style: italic;
 }
 
 /* Prevent weird ghost image form canavas page */
@@ -171,4 +177,8 @@ img, div {
 
 .range-input input[type=number] {
     width: 4.5em;
+}
+
+body {
+    background-color: black;
 }

@@ -4,6 +4,14 @@ for (var i = 0; i < canvases.length; i++) {
     setupCanvas(canvases[i])
 }
 
+function clearCanvases() {
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i]
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
 function setupCanvas(canvas) {
     var ctx = canvas.getContext("2d");
     var width = canvas.width;
@@ -16,7 +24,7 @@ function setupCanvas(canvas) {
     var input = document.getElementById("length")
 
     canvas.onmousedown = function (e){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        clearCanvases();
         var BB = canvas.getBoundingClientRect();
 
         img = ctx.getImageData(0, 0, width, height);
