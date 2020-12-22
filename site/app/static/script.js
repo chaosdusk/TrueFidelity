@@ -16,6 +16,7 @@ function setupCanvas(canvas) {
     var input = document.getElementById("length")
 
     canvas.onmousedown = function (e){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         var BB = canvas.getBoundingClientRect();
 
         img = ctx.getImageData(0, 0, width, height);
@@ -25,7 +26,6 @@ function setupCanvas(canvas) {
     };
 
     canvas.onmousemove = function linemove(e){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (hold){
             var BB = canvas.getBoundingClientRect();
             ctx.putImageData(img, 0, 0);
