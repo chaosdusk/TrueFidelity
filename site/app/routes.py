@@ -271,55 +271,47 @@ def label_path(batch_id, instance, index):
                                                     form=form,
                                                     instance=instance)
 
-# wl and ww should be between 0-100
-@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/false.png", methods=['GET'])
+@app.route("/imagedata/<int:image_id>/<wl>/<int:ww>/false.png", methods=['GET'])
 def imagedata_false(image_id, wl, ww):
     image = Image.query.get(image_id)
-    # TODO: Make more robust?
     if (image is None):
+        print("Invalid Image URL", image_id)
         return "Invalid image id"
-
-    fig=Figure(figsize=(6.4, 6.4))
-    ax=fig.add_subplot(111)
 
     image_filepath = image.getFakeFilePath()
     print("FILEPATH:", image_filepath)
-    with app.open_resource(f'static/{image_filepath}') as f:
-        fig_handle = pl.load(f)
-        vcenter = wl * 255 / 100
-        vmin = int(vcenter - ww * 255 / 100 / 2)
-        vmax = int(vcenter + ww * 255 / 100 / 2)
-        print(vmin, vmax)
-        ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
-        ax.axis('off')
-        fig.tight_layout(pad=0)
+    return _returnImage(image_filepath, wl, ww)
 
-    canvas=FigureCanvas(fig)
-    png_output = BytesIO()
-    canvas.print_png(png_output)
-    response=make_response(png_output.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
-
-@app.route("/imagedata/<int:image_id>/<int:wl>/<int:ww>/true.png", methods=['GET'])
+@app.route("/imagedata/<int:image_id>/<wl>/<int:ww>/true.png", methods=['GET'])
 def imagedata_true(image_id, wl, ww):
     image = Image.query.get(image_id)
     # TODO: Make more robust?
     if (image is None):
+        print("Invalid Image URL", image_id)
         return "Invalid image id"
+
+    image_filepath = image.getFilePath()
+    print("FILEPATH:", image_filepath)
+    return _returnImage(image_filepath, wl, ww)
+
+def _returnImage(image_filepath, wl, ww):
+    try:
+        wl = int(wl)
+        ww = int(ww)
+    except (ValueError, TypeError):
+        return "Invalid url"
 
     fig=Figure(figsize=(6.4, 6.4))
     ax=fig.add_subplot(111)
 
-    image_filepath = image.getFilePath()
-    print("FILEPATH:", image_filepath)
     with app.open_resource(f'static/{image_filepath}') as f:
         fig_handle = pl.load(f)
-        vcenter = wl * 255 / 100
-        vmin = int(vcenter - ww * 255 / 100 / 2)
-        vmax = int(vcenter + ww * 255 / 100 / 2)
-        print(vmin, vmax)
-        ax.imshow(fig_handle, cmap='gray', vmin=max(0, vmin), vmax=min(255, vmax))
+        imgmin = wl-ww//2
+        imgmax = wl+ww//2
+        fig_handle[fig_handle < imgmin] = imgmin
+        fig_handle[fig_handle > imgmax] = imgmax
+        print("Image min", imgmin, "Image max", imgmax)
+        ax.imshow(fig_handle, vmin=imgmin, vmax=imgmax, cmap='gray')
         ax.axis('off')
         fig.tight_layout(pad=0)
 
