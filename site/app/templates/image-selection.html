@@ -77,14 +77,20 @@
             <div class="spacer">
               <div class="adjustment-container">
                 <div class="range-input">
-                  <input type="range" id="wwRange" name="ww"
-                        min="25" max="100" value="80" step="1" onchange="updateWW(this.value)">
-                  <label for="wwRange">WW</label>
+                  <div class="range-input-holder">
+                    <label for="wwRange">WW</label>
+                    <input type="range" id="wwRange" name="ww"
+                          min="25" max="100" value="80" step="1" onchange="updateWW(this.value)" oninput="this.nextElementSibling.value = this.value">
+                    <input type="number" name="amountInput" min="25" max="100" value="80" oninput="this.previousElementSibling.value=this.value" />
+                  </div>
                 </div>
                 <div class="range-input">
-                  <input type="range" id="wlRange" name="wl"
-                        min="-300" max="300" value="70" step="1" onchange="updateWL(this.value)">
-                  <label for="wlRange">WL</label>
+                  <div class="range-input-holder">
+                    <label for="wlRange">WL</label>
+                    <input type="range" id="wlRange" name="wl"
+                          min="-300" max="300" value="70" step="1" onchange="updateWL(this.value)" oninput="this.nextElementSibling.value = this.value">
+                    <input type="number" name="amountInput" min="-300" max="300" value="70" oninput="this.previousElementSibling.value=this.value" />
+                  </div>
                 </div>
               </div>
             </div>

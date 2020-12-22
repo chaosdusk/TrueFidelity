@@ -112,6 +112,7 @@ img, div {
 
 #sideChosen li {
     display: inline-block;
+    margin: 0 0.5em;
 }
 
 #sideChosen-container {
@@ -139,8 +140,7 @@ img, div {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0.5em;
 }
 
 .navbar {
@@ -153,4 +153,22 @@ img, div {
 
 .green-label {
     color: limegreen;
+}
+
+.range-input-holder {
+    display: flex;
+    justify-content: space-between;
+}
+
+.range-input-holder label {
+    min-width: 2.1em;
+}
+
+.range-input input[type=range] {
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.range-input input[type=number] {
+    width: 4.5em;
 }
