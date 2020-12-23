@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<div class="container">
     <h1>Register</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
@@ -35,4 +36,5 @@
         <p>{{ form.submit() }}</p>
     </form>
     <a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a>
+</div>
 {% endblock %}
