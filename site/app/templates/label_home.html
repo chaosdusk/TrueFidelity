@@ -1,38 +1,42 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/label-home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/label_home.css') }}">
 {% endblock %}
 
 {% block body %}
+<div class="container">
 
-{% for batch_tuple in batches %}
-{% set batch = batch_tuple[0] %}
-{% set batch_count = batch_tuple[1] %}
-<div class="batch-container">
-    <h2>
-        {{ batch.name }}
-    </h2>
-    <p>
-        {{ batch.description }}
-    </p>
-    <p>
-        <a href="{{ url_for('download_own_results', batch_id=batch.id) }}">Download labels</a>
-    </p>
-    {% with current_batch_labels = labeled_dict[batch.id] or dict() %}
-    {% for _ in range(instances) %}
-    {% with num_labeled = current_batch_labels[loop.index] or 0 %}
-    <div class="instance-container">
-        <h3>instance: {{ loop.index }}</h3>
-        <p>{{ num_labeled }} / {{ batch_count }}</p>
-        <a href={{url_for('redirect_to_firstunlabeled', batch_id=batch.id, instance=loop.index)}}>Link to the instance</a>
+    {% for batch_tuple in batches %}
+    {% set batch = batch_tuple[0] %}
+    {% set batch_count = batch_tuple[1] %}
+    <div class="batch-container">
+        <div class="batch-container-top">
+            <h2>
+                {{ batch.name }}
+            </h2>
+            <p>
+                {{ batch.description }}
+            </p>
+            <p>
+                <a href="{{ url_for('download_own_results', batch_id=batch.id) }}">Download labels</a>
+            </p>
+        </div>
+        <div class="batch-container-body">
+            {% with current_batch_labels = labeled_dict[batch.id] or dict() %}
+            {% for _ in range(instances) %}
+            {% with num_labeled = current_batch_labels[loop.index] or 0 %}
+            <div class="batch-container-instance">
+                <h3>Label instance: {{ loop.index }}</h3>
+                <p>Labeled: {{ num_labeled }} / {{ batch_count }}</p>
+                <a href={{url_for('redirect_to_firstunlabeled', batch_id=batch.id, instance=loop.index)}}>Label this instance →</a>
+            </div>
+            {% endwith %}
+            {% endfor %}
+            {% endwith %}
+        </div>
     </div>
-    {% endwith %}
-    {% endfor %}
-    {% endwith %}
-</div>
-<hr>
-
-
+    <br>
 {% endfor %}
+</div>
 {% endblock %}
