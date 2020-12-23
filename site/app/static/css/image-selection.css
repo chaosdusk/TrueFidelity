@@ -42,6 +42,7 @@
     margin-left: 15px;
     display: flex;
     flex-direction: column;
+    color: darkgray;
 }
 
 .sidebar-links {
@@ -62,7 +63,7 @@
 }
 
 .choice-container {
-    background-color: lightgrey;
+    background-color: darkgrey;
     width: 100%;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -95,6 +96,11 @@
     align-items: center;
 }
 
+.navigation-container a {
+    color: white;
+    font-style: italic;
+}
+
 /* Prevent weird ghost image form canavas page */
 img, div {
     -khtml-user-select: none;
@@ -112,6 +118,7 @@ img, div {
 
 #sideChosen li {
     display: inline-block;
+    margin: 0 0.5em;
 }
 
 #sideChosen-container {
@@ -139,8 +146,7 @@ img, div {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0.5em;
 }
 
 .navbar {
@@ -153,4 +159,26 @@ img, div {
 
 .green-label {
     color: limegreen;
+}
+
+.range-input-holder {
+    display: flex;
+    justify-content: space-between;
+}
+
+.range-input-holder label {
+    min-width: 2.1em;
+}
+
+.range-input input[type=range] {
+    margin-right: 1em;
+    margin-left: 1em;
+}
+
+.range-input input[type=number] {
+    width: 4.5em;
+}
+
+body {
+    background-color: black;
 }

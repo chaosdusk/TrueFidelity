@@ -4,6 +4,14 @@ for (var i = 0; i < canvases.length; i++) {
     setupCanvas(canvases[i])
 }
 
+function clearCanvases() {
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i]
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
 function setupCanvas(canvas) {
     var ctx = canvas.getContext("2d");
     var width = canvas.width;
@@ -16,6 +24,7 @@ function setupCanvas(canvas) {
     var input = document.getElementById("length")
 
     canvas.onmousedown = function (e){
+        clearCanvases();
         var BB = canvas.getBoundingClientRect();
 
         img = ctx.getImageData(0, 0, width, height);
@@ -25,7 +34,6 @@ function setupCanvas(canvas) {
     };
 
     canvas.onmousemove = function linemove(e){
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (hold){
             var BB = canvas.getBoundingClientRect();
             ctx.putImageData(img, 0, 0);
@@ -85,46 +93,25 @@ function helloWorld(val) {
     console.log(val);
 }
 
-
-// Deprecated versions since only need one
-function updateWW(ww, image) {
-    console.log(ww);
-    const prevSrc = document.getElementById(image).src;
-    console.log("Previous src", prevSrc);
-    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
-    console.log(match)
-    document.getElementById(image).src = "/imagedata/" + match[1] + "/" + match[2] + "/" + ww + "/" + match[4];
-}
-
-function updateWL(wl, image) {
-    console.log(wl);
-    const prevSrc = document.getElementById(image).src;
-    console.log("Previous src", prevSrc);
-    const match = prevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
-    console.log(match)
-    document.getElementById(image).src = "/imagedata/" + match[1] + "/" + wl + "/" + match[3] + "/" + match[4];
-}
-
-
 const imageAimage = document.getElementById('imageAimage')
 const imageBimage = document.getElementById('imageBimage')
 function updateWW(ww) {
     const AprevSrc = imageAimage.src;
-    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/(-?[0-9]+)\/(-?[0-9]+)\/(.*)/)
     imageAimage.src = "/imagedata/" + Amatch[1] + "/" + Amatch[2] + "/" + ww + "/" + Amatch[4];
 
     const BprevSrc = imageBimage.src;
-    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/(-?[0-9]+)\/(-?[0-9]+)\/(.*)/)
     imageBimage.src = "/imagedata/" + Bmatch[1] + "/" + Bmatch[2] + "/" + ww + "/" + Bmatch[4];
 }
 
 function updateWL(wl) {
     const AprevSrc = imageAimage.src;
-    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const Amatch = AprevSrc.match(/imagedata\/([0-9]+)\/(-?[0-9]+)\/(-?[0-9]+)\/(.*)/)
     imageAimage.src = "/imagedata/" + Amatch[1] + "/" + wl + "/" + Amatch[3] + "/" + Amatch[4];
 
     const BprevSrc = imageBimage.src;
-    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/([0-9]+)\/([0-9]+)\/(.*)/)
+    const Bmatch = BprevSrc.match(/imagedata\/([0-9]+)\/(-?[0-9]+)\/(-?[0-9]+)\/(.*)/)
     imageBimage.src = "/imagedata/" + Bmatch[1] + "/" + wl + "/" + Bmatch[3] + "/" + Bmatch[4];
 }
 
