@@ -1,13 +1,23 @@
 .index-button {
-    border: 1px outset blue;
+    border-style: ridge;
+    padding: 1em;
+    margin: 1em;
     background-color: lightBlue;
     height:100px;
     width:100px;
     cursor:pointer;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .index-button:hover {
-   background-color: blue;
+    background-color: darkslateblue;
     color:white;
+}
+
+.index-buttons {
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
 }
