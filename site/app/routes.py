@@ -206,6 +206,20 @@ def label_home():
     return render_template('label_home.html', batches=batches, labeled_dict=labeled_dict, instances=constants.NUM_INSTANCES)
 
 
+@app.route('/label/<int:batch_id>/<int:instance>', methods=['GET', 'POST'])
+@login_required
+@active_required
+def redirect_to_firstunlabeled(batch_id, instance):
+    images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
+    queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
+    labeledImageIds = set()
+    for label in queryLabels:
+        labeledImageIds.add(label.image_id)
+    for i, image in enumerate(images):
+        if (image.id not in labeledImageIds):
+            return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=i))
+    return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=0))
+
 # Instance is 1-indexed, index is 0-indexed
 @app.route('/label/<int:batch_id>/<int:instance>/<int:index>', methods=['GET', 'POST'])
 @login_required
