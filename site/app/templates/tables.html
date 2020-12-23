@@ -5,133 +5,143 @@
 {% endblock %}
 
 {% block body %}
-Hello there!
-<hr>
-Users
-<table>
-    {% if users|length > 0 %}
-    {% set userkeys = users[0].__table__.columns._data.keys() %}
-    {% endif %}
-    {% for user in users %}
-    {% if loop.first %}
-    {% set userkeys = user.__table__.columns._data.keys() %}
-    {{ userkeys }}
-    <TR>
-        {% for key in userkeys if key != "password_hash" %}
-        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
-        {% endfor %}
-        <TD>
-            Change Admin
-        </TD>
-        <TD>
-            Change status
-        </TD>
-    </TR>
-    {% endif %}
+<div class="container">
+<h2>Users</h2>
+<div class="container pre-scrollable">
+    <table class="table">
+        {% if users|length > 0 %}
+        {% set userkeys = users[0].__table__.columns._data.keys() %}
+        {% endif %}
+        {% for user in users %}
+        {% if loop.first %}
+        {% set userkeys = user.__table__.columns._data.keys() %}
+        <thead class="thead-dark">
+            <TR>
+                {% for key in userkeys if key != "password_hash" %}
+                <TH class={{'c' ~ loop.index}}>{{ key }}</TH>
+                {% endfor %}
+                <TH>
+                    Change Admin
+                </TH>
+                <TH>
+                    Change status
+                </TH>
+            </TR>
+        </thead>
+        {% endif %}
 
-    <TR>
-        {% for key in userkeys if key != "password_hash" %}
-        <TD class={{'c' ~ loop.index}}>{{ user[key] }}</TD>
-        {% endfor %}
-        <TD>
-            {% if user.is_admin %}
-            <form action="{{ url_for('deactivate_admin', username=user.username) }}" method="post">
-                {{ form.hidden_tag() }}
-                {{ form.submit(value='deactivate') }}
-            </form>
-            {% else %}
-            <form action="{{ url_for('activate_admin', username=user.username) }}" method="post">
-                {{ form.hidden_tag() }}
-                {{ form.submit(value='activate') }}
-            </form>
-            {% endif %}
-        <TD>
-            {% if user.status == INACTIVE %}
-            <form action="{{ url_for('activate_status', username=user.username) }}" method="post">
-                {{ form.hidden_tag() }}
-                {{ form.submit(value='activate') }}
-            </form>
-            {% else %}
-            <form action="{{ url_for('deactivate_status', username=user.username) }}" method="post">
-                {{ form.hidden_tag() }}
-                {{ form.submit(value='deactivate') }}
-            </form>
-            {% endif %}
-        </TD>
-    </TR>
+        <TR>
+            {% for key in userkeys if key != "password_hash" %}
+            <TD class={{'c' ~ loop.index}}>{{ user[key] }}</TD>
+            {% endfor %}
+            <TD>
+                {% if user.is_admin %}
+                <form action="{{ url_for('deactivate_admin', username=user.username) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='deactivate') }}
+                </form>
+                {% else %}
+                <form action="{{ url_for('activate_admin', username=user.username) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='activate') }}
+                </form>
+                {% endif %}
+            <TD>
+                {% if user.status == INACTIVE %}
+                <form action="{{ url_for('activate_status', username=user.username) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='activate') }}
+                </form>
+                {% else %}
+                <form action="{{ url_for('deactivate_status', username=user.username) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='deactivate') }}
+                </form>
+                {% endif %}
+            </TD>
+        </TR>
 
-    {% endfor %}
-</table>
-<hr>
-
-Batch
-<table>
-    {% if batches|length > 0 %}
-    {% set batchkeys = batches[0].__table__.columns._data.keys() %}
-    {% endif %}
-    {% for batch in batches %}
-    {% if loop.first %}
-    {{ batchkeys }}
-    <TR>
-        {% for key in batchkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
         {% endfor %}
-        <TD>
-            Download Labels
-        </TD>
-    </TR>
-    {% endif %}
+    </table>
+</div>
+<br>
 
-    <TR>
-        {% for key in batchkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ batch[key] }}</TD>
-        {% endfor %}
-        <TD>
-            <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download {{ batch.id }}</a>
-        </TD>
-    </TR>
-    {% endfor %}
-</table>
-<hr>
+<h2>Batch</h2>
+<div class="container pre-scrollable">
+    <table class="table">
+        {% if batches|length > 0 %}
+        {% set batchkeys = batches[0].__table__.columns._data.keys() %}
+        {% endif %}
+        {% for batch in batches %}
+        {% if loop.first %}
+        <thead class="thead-dark">
+            <TR>
+                {% for key in batchkeys %}
+                <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+                {% endfor %}
+                <TH>
+                    Download Labels
+                </TH>
+            </TR>
+        </thead>
+        {% endif %}
 
-Labels
-<table>
-    {% if labels|length > 0 %}
-    {% set labelkeys = labels[0].__table__.columns._data.keys() %}
-    {% endif %}
-    {% for label in labels %}
-    {% if loop.first %}
-    {% set labelkeys = label.__table__.columns._data.keys() %}
-    {{ labelkeys }}
-    <TR>
-        {% for key in labelkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
+        <TR>
+            {% for key in batchkeys %}
+            <TD class={{'c' ~ loop.index}}>{{ batch[key] }}</TD>
+            {% endfor %}
+            <TD>
+                <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download {{ batch.id }}</a>
+            </TD>
+        </TR>
         {% endfor %}
-    </TR>
-    {% endif %}
-
-    <TR>
-        {% for key in labelkeys %}
-        <TD class={{'c' ~ loop.index}}>{{ label[key] }}</TD>
-        {% endfor %}
-    </TR>
-    {% endfor %}
-</table>
+    </table>
+</div>
 <hr>
 
-Image
-<table>
+<h2>Labels</h2>
+<div class="container pre-scrollable">
+    <table class="table">
+        {% if labels|length > 0 %}
+        {% set labelkeys = labels[0].__table__.columns._data.keys() %}
+        {% endif %}
+        {% for label in labels %}
+        {% if loop.first %}
+        {% set labelkeys = label.__table__.columns._data.keys() %}
+        <thead class="thead-dark">
+            <TR>
+                {% for key in labelkeys %}
+                <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+                {% endfor %}
+            </TR>
+        </thead>
+        {% endif %}
+
+        <TR>
+            {% for key in labelkeys %}
+            <TD class={{'c' ~ loop.index}}>{{ label[key] }}</TD>
+            {% endfor %}
+        </TR>
+        {% endfor %}
+    </table>
+</div>
+<hr>
+
+<h2>Images</h2>
+<div class="container pre-scrollable">
+<table class="table">
     {% if images|length > 0 %}
     {% set imagekeys = images[0].__table__.columns._data.keys() %}
     {% endif %}
     {% for image in images %}
     {% if loop.first %}
-    {{ imagekeys }}
-    <TR>
-        {% for key in imagekeys %}
-        <TD class={{'c' ~ loop.index}}>{{ key }}</TD>
-        {% endfor %}
-    </TR>
+    <thead class="thead-dark">
+        <TR>
+            {% for key in imagekeys %}
+            <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+            {% endfor %}
+        </TR>
+    </thead>
     {% endif %}
 
     <TR>
@@ -142,5 +152,8 @@ Image
     {% endfor %}
 </table>
 <hr>
+</div>
 
+<br>
+</div>
 {% endblock %}
