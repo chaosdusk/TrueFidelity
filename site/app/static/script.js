@@ -1,3 +1,4 @@
+// Drawing
 var canvases = document.getElementsByTagName('canvas');
 
 for (var i = 0; i < canvases.length; i++) {
@@ -43,7 +44,6 @@ function setupCanvas(canvas) {
             ctx.moveTo(prevX, prevY);
             ctx.lineTo(curX, curY);
             ctx.stroke();
-            // canvas_data.line.push({ "starx": prevX, "starty": prevY, "endx": curX, "endY": curY, "thick": ctx.lineWidth, "color": ctx.strokeStyle });
             ctx.closePath();
             input.value = (Math.sqrt((curX - prevX) ** 2 + (curY - prevY) ** 2) / width * 500).toFixed(0);
         }
@@ -89,10 +89,6 @@ document.getElementById('sideChosen').addEventListener("change", function() {
 })
 
 // Range change values
-function helloWorld(val) {
-    console.log(val);
-}
-
 const imageAimage = document.getElementById('imageAimage')
 const imageBimage = document.getElementById('imageBimage')
 function updateWW(ww) {

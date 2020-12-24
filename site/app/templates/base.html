@@ -14,7 +14,6 @@
     <!-- Latest compiled JavaScript boostrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <!-- TODO -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <!-- fonts -->
@@ -28,7 +27,6 @@
                 <a class="navbar-brand" href="{{ url_for('index') }}">TrueFidelity</a>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <!-- <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li> -->
                 {% if current_user.is_anonymous %}
                 <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 {% else %}
@@ -65,7 +63,6 @@
     {% endif %}
     {% endwith %}
 
-    <!-- TODO: Make a header for all of the pages -->
     {% block body %}{% endblock %}
 
     <!-- Optional JavaScript -->

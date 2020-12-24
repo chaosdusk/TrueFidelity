@@ -233,7 +233,6 @@ def label_path(batch_id, instance, index):
     # Note that index cannot be negative since it will not match as an int. Would have to handle negatives by myself
     if (index >= len(images) or index < 0):
         if (index == 0):
-            # TODO: figure out what to do if batch is empty, probs just redirect to label and flash message
             flash(f'Batch {batch_id} is empty', 'Warning')
             return redirect(url_for('label_home'))
         else:
@@ -299,7 +298,6 @@ def imagedata_false(image_id, wl, ww):
 @app.route("/imagedata/<int:image_id>/<wl>/<int:ww>/true.png", methods=['GET'])
 def imagedata_true(image_id, wl, ww):
     image = Image.query.get(image_id)
-    # TODO: Make more robust?
     if (image is None):
         print("Invalid Image URL", image_id)
         return "Invalid image id"
