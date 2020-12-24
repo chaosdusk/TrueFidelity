@@ -63,7 +63,6 @@ var imageA = document.getElementById("imageA");
 var imageB = document.getElementById("imageB");
 
 imageA.addEventListener("mousedown", function() {
-    console.log("clicked A");
     imageA.nextElementSibling.classList.add("selected");
     imageB.nextElementSibling.classList.remove("selected");
     document.getElementById('sideChosen-' + imageA.getAttribute('value')).checked = true;
@@ -71,7 +70,6 @@ imageA.addEventListener("mousedown", function() {
 
 
 imageB.addEventListener("mousedown", function() {
-    console.log("clicked B");
     imageB.nextElementSibling.classList.add("selected");
     imageA.nextElementSibling.classList.remove("selected");
     document.getElementById('sideChosen-' + imageB.getAttribute('value')).checked = true;
