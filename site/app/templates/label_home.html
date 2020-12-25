@@ -6,6 +6,9 @@
 
 {% block body %}
 <div class="container">
+    {% if batches|length == 0 %}
+    <p><i>No active batches available to code.</i></p>
+    {% endif %}
 
     {% for batch_tuple in batches %}
     {% set batch = batch_tuple[0] %}

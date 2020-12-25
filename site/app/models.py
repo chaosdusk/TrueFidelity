@@ -85,6 +85,7 @@ class Batch(db.Model):
     name = db.Column(db.String(64))
     description = db.Column(db.String(512))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.SmallInteger, default=constants.INACTIVE)
 
     images = db.relationship('Image', backref='batch', lazy='dynamic')
 

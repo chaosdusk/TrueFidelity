@@ -155,13 +155,47 @@ def activate_admin(username):
     else:
         return redirect(url_for('display_tables'))
 
+@app.route('/database/batch/<int:batch_id>/activate', methods=['POST'])
+@login_required
+@admin_required
+def activate_batch(batch_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        batch = Batch.query.get(batch_id)
+        if batch is None:
+            batch('batch {} not found.'.format(batch), "error")
+            return redirect(url_for('display_tables'))
+        batch.status = constants.ACTIVE
+        db.session.commit()
+        flash('batch {} has been activated!'.format(batch), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
 
-# TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
+@app.route('/database/batch/<int:batch_id>/deactivate', methods=['POST'])
+@login_required
+@admin_required
+def deactivate_batch(batch_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        batch = Batch.query.get(batch_id)
+        if batch is None:
+            batch('batch {} not found.'.format(batch), "error")
+            return redirect(url_for('display_tables'))
+        batch.status = constants.INACTIVE
+        db.session.commit()
+        flash('batch {} has been deactivated!'.format(batch), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
+
 @app.route('/label', methods=['GET'])
 @login_required
 @active_required
 def label_home():
-    batches = Batch.query.outerjoin(Image).with_entities(Batch, func.count(Image.id)).\
+    batches = Batch.query.filter_by(status=constants.ACTIVE).\
+                            outerjoin(Image).with_entities(Batch, func.count(Image.id)).\
                             group_by(Batch).\
                             order_by(Batch.id.asc()).all()
 

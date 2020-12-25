@@ -79,6 +79,9 @@
                 <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
                 {% endfor %}
                 <TH>
+                    Change status
+                </TH>
+                <TH>
                     Download Labels
                 </TH>
             </TR>
@@ -89,6 +92,19 @@
             {% for key in batchkeys %}
             <TD class={{'c' ~ loop.index}}>{{ batch[key] }}</TD>
             {% endfor %}
+            <TD>
+                {% if batch.status == INACTIVE %}
+                <form action="{{ url_for('activate_batch', batch_id=batch.id) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='activate') }}
+                </form>
+                {% else %}
+                <form action="{{ url_for('deactivate_batch', batch_id=batch.id) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.submit(value='deactivate') }}
+                </form>
+                {% endif %}
+            </TD>
             <TD>
                 <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download {{ batch.id }}</a>
             </TD>
