@@ -155,30 +155,47 @@ def activate_admin(username):
     else:
         return redirect(url_for('display_tables'))
 
+@app.route('/database/batch/<int:batch_id>/activate', methods=['POST'])
+@login_required
+@admin_required
+def activate_batch(batch_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        batch = Batch.query.get(batch_id)
+        if batch is None:
+            batch('batch {} not found.'.format(batch), "error")
+            return redirect(url_for('display_tables'))
+        batch.status = constants.ACTIVE
+        db.session.commit()
+        flash('batch {} has been activated!'.format(batch), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
 
-# TODO: figure out link id to redirect to (will also be able to show if it's been completed o rnot)
+@app.route('/database/batch/<int:batch_id>/deactivate', methods=['POST'])
+@login_required
+@admin_required
+def deactivate_batch(batch_id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        batch = Batch.query.get(batch_id)
+        if batch is None:
+            batch('batch {} not found.'.format(batch), "error")
+            return redirect(url_for('display_tables'))
+        batch.status = constants.INACTIVE
+        db.session.commit()
+        flash('batch {} has been deactivated!'.format(batch), "success")
+        return redirect(url_for('display_tables'))
+    else:
+        return redirect(url_for('display_tables'))
+
+
 @app.route('/label', methods=['GET'])
 @login_required
 @active_required
 def label_home():
-
-    # images = Image.query.all()
-    # batches = Batch.query.order_by(Batch.timestamp.asc()).all()
-    # for batch in batches:
-    #     batch_data = {}
-    #     batch_data['batch'] = batch
-    #     batch_data['total'] = len(Image.query.filter_by(batch_id=batch.id).all())
-    #     instance_counts = [0] * constants.NUM_INSTANCES
-
-    # totalImages = db.session.query(Batch, Image).outerjoin(Image).with_entities(Batch.id, func.count(Image.id)).group_by(Batch.id).all()
-
-    # Notice that sum will be 0 so handle taht case
-    # [(batch1, 3), (batch2, 0)]
-    # batches = db.session.query(Batch, Image).outerjoin(Image).\
-    #                                 with_entities(Batch, func.count(Image.id)).\
-    #                                 group_by(Batch).\
-    #                                 order_by(Batch.id.asc()).all()
-    batches = Batch.query.outerjoin(Image).with_entities(Batch, func.count(Image.id)).\
+    batches = Batch.query.filter_by(status=constants.ACTIVE).\
+                            outerjoin(Image).with_entities(Batch, func.count(Image.id)).\
                             group_by(Batch).\
                             order_by(Batch.id.asc()).all()
 
@@ -200,9 +217,6 @@ def label_home():
             labeled_dict[batch_id] = {}
         labeled_dict[batch_id][instance] = num_labeled
 
-    print("batches", batches)
-    print("labeled", labeled)
-    print("NUM labeled_dict", labeled_dict)
     return render_template('label_home.html', batches=batches, labeled_dict=labeled_dict, instances=constants.NUM_INSTANCES)
 
 
@@ -244,16 +258,14 @@ def label_path(batch_id, instance, index):
     form = LabelForm()
     if form.validate_on_submit():
         label = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).filter_by(image_id=image.id).first()
-        print("Previous label: ", label)
+        # If label did not exist
         if (label is None):
-            print("Creating new label")
             label = Label(user_id=current_user.id, image_id=image.id, instance=instance)
         label.side_user_clicked = form.sideChosen.data
         label.measurement = form.length.data
         label.timestamp = datetime.utcnow()
         db.session.add(label)
         db.session.commit()
-        print("new label:", label)
         flash(f'Saved label for image {image.id} successfully', 'success')
         return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index + 1))
 
@@ -292,7 +304,6 @@ def imagedata_false(image_id, wl, ww):
         return "Invalid image id"
 
     image_filepath = image.getFakeFilePath()
-    print("FILEPATH:", image_filepath)
     return _returnImage(image_filepath, wl, ww)
 
 @app.route("/imagedata/<int:image_id>/<wl>/<int:ww>/true.png", methods=['GET'])
@@ -303,7 +314,6 @@ def imagedata_true(image_id, wl, ww):
         return "Invalid image id"
 
     image_filepath = image.getFilePath()
-    print("FILEPATH:", image_filepath)
     return _returnImage(image_filepath, wl, ww)
 
 def _returnImage(image_filepath, wl, ww):
@@ -322,7 +332,6 @@ def _returnImage(image_filepath, wl, ww):
         imgmax = wl+ww//2
         fig_handle[fig_handle < imgmin] = imgmin
         fig_handle[fig_handle > imgmax] = imgmax
-        print("Image min", imgmin, "Image max", imgmax)
         ax.imshow(fig_handle, vmin=imgmin, vmax=imgmax, cmap='gray')
         ax.axis('off')
         fig.tight_layout(pad=0)
