@@ -82,7 +82,14 @@ def display_tables():
     labels = Label.query.all()
     images = Image.query.all()
     batches = Batch.query.all()
-    return render_template('tables.html', users=users, labels=labels, images=images, batches=batches, form=form, INACTIVE=constants.INACTIVE)
+    return render_template('tables.html',
+                            users=users,
+                            labels=labels,
+                            images=images,
+                            batches=batches,
+                            form=form,
+                            INACTIVE=constants.INACTIVE,
+                            NUM_INSTANCES=constants.NUM_INSTANCES)
 
 @app.route('/database/activate/<username>', methods=['POST'])
 @login_required
@@ -396,6 +403,31 @@ def download_all_results(batch_id):
         mimetype="text/csv",
         headers={"Content-disposition":
                  f"attachment; filename=allusers_labels_{batch_id}_{timestr}.csv"})
+
+@app.route('/download/all/<int:batch_id>/<int:instance>', methods=['GET'])
+@login_required
+@admin_required
+def download_all_results_instance(batch_id, instance):
+    # If admin, download all
+    df = pd.read_sql(db.session.query(Batch, Image, Label, Label.timestamp.label("label_timestamp"), User.username, User.email).\
+                                    filter_by(id=batch_id).\
+                                    outerjoin(Image, Image.batch_id == Batch.id).\
+                                    outerjoin(Label, Label.image_id == Image.id).\
+                                    filter_by(instance=instance).\
+                                    join(User, Label.user_id == User.id).statement,
+                    db.session.bind)
+
+    df = df[["username", "email",
+            "batch_id", "name", "instance",
+            "image_id", "dose", "hu", "reconstruction", "lesion_size_mm", "size_measurement", "side_with_lesion",
+            "side_user_clicked", "measurement", "label_timestamp"]]
+    csv = df.to_csv(index=False)
+    timestr = time.strftime("%Y%m%d-%H%M")
+    return Response(
+        csv,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 f"attachment; filename=allusers_labels_{batch_id}_i-{instance}_{timestr}.csv"})
 
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():

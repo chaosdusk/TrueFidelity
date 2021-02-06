@@ -76,14 +76,17 @@
         <thead class="thead-dark">
             <TR>
                 {% for key in batchkeys %}
-                <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+                <TH class={{'c' ~ loop.index}}>{{ key }}</TH>
                 {% endfor %}
                 <TH>
                     Change status
                 </TH>
                 <TH>
-                    Download Labels
+                    Download All
                 </TH>
+                {% for _ in range(NUM_INSTANCES) %}
+                <TH>Download Instance {{ loop.index }}</TH>
+                {% endfor %}
             </TR>
         </thead>
         {% endif %}
@@ -106,8 +109,13 @@
                 {% endif %}
             </TD>
             <TD>
-                <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download {{ batch.id }}</a>
+                <a href="{{ url_for('download_all_results', batch_id=batch.id) }}">Download batch: {{ batch.id }}</a>
             </TD>
+            {% for _ in range(NUM_INSTANCES) %}
+            <TD>
+                <a href="{{ url_for('download_all_results_instance', batch_id=batch.id, instance=loop.index) }}">Download Instance {{ loop.index }}</a>
+            </TD>
+            {% endfor %}
         </TR>
         {% endfor %}
     </table>
@@ -126,7 +134,7 @@
         <thead class="thead-dark">
             <TR>
                 {% for key in labelkeys %}
-                <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+                <TH class={{'c' ~ loop.index}}>{{ key }}</TH>
                 {% endfor %}
             </TR>
         </thead>
@@ -153,7 +161,7 @@
     <thead class="thead-dark">
         <TR>
             {% for key in imagekeys %}
-            <TH class={{'c' ~ loop.index}}>{{ key }}</TD>
+            <TH class={{'c' ~ loop.index}}>{{ key }}</TH>
             {% endfor %}
         </TR>
     </thead>
