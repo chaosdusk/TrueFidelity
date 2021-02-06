@@ -217,7 +217,10 @@ def label_home():
             labeled_dict[batch_id] = {}
         labeled_dict[batch_id][instance] = num_labeled
 
-    return render_template('label_home.html', batches=batches, labeled_dict=labeled_dict, instances=constants.NUM_INSTANCES)
+    return render_template('label_home.html',
+                            batches=batches,
+                            labeled_dict=labeled_dict,
+                            active_instances=constants.ACTIVE_INSTANCES)
 
 
 @app.route('/label/<int:batch_id>/<int:instance>', methods=['GET', 'POST'])
@@ -240,7 +243,7 @@ def redirect_to_firstunlabeled(batch_id, instance):
 @login_required
 @active_required
 def label_path(batch_id, instance, index):
-    if (instance > constants.NUM_INSTANCES or instance == 0):
+    if (instance > constants.NUM_INSTANCES or instance <= 0 or instance not in constants.ACTIVE_INSTANCES):
         return redirect(url_for('label_home'))
 
     # if index out of bounds, redirect to 0
