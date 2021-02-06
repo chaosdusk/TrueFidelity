@@ -225,6 +225,7 @@ def label_home():
 @active_required
 def redirect_to_firstunlabeled(batch_id, instance):
     images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
+    random.Random(instance).shuffle(images)
     queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
     labeledImageIds = set()
     for label in queryLabels:
@@ -244,6 +245,7 @@ def label_path(batch_id, instance, index):
 
     # if index out of bounds, redirect to 0
     images = Image.query.filter_by(batch_id=batch_id).order_by(Image.id.asc()).all()
+    random.Random(instance).shuffle(images)
     # Note that index cannot be negative since it will not match as an int. Would have to handle negatives by myself
     if (index >= len(images) or index < 0):
         if (index == 0):
@@ -266,7 +268,7 @@ def label_path(batch_id, instance, index):
         label.timestamp = datetime.utcnow()
         db.session.add(label)
         db.session.commit()
-        flash(f'Saved label for image {image.id} successfully', 'success')
+        flash(f'Saved label for image {index} successfully', 'success')
         return redirect(url_for('label_path', batch_id=batch_id, instance=instance, index=index + 1))
 
     queryLabels = Label.query.filter_by(user_id=current_user.id).filter_by(instance=instance).join(Image).filter_by(batch_id=batch_id).all()
